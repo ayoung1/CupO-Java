@@ -5,9 +5,6 @@ html, body {
 	background-color:cornflowerblue;
 	height: 100%;
 }
-footer{
-	height: 5em;
-}
 .nameplate{
 	padding-top:15px;
 }
@@ -35,10 +32,10 @@ footer{
 	min-height: 100%;
 	height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
 	height: 100%;
-	margin: 0 auto -5em; /* the bottom margin is the negative value of the footer's height */
+	margin: 0 auto -7em; /* the bottom margin is the negative value of the footer's height */
 }
 .footer, .push {
-	height: 5em; /* .push must be the same height as .footer */
+	height: 7em; /* .push must be the same height as .footer */
 }
 
 /*
