@@ -1,0 +1,49 @@
+* {
+	margin: 0;
+}
+html, body {
+	background-color:cornflowerblue;
+	height: 100%;
+}
+footer{
+	height: 5em;
+}
+.nameplate{
+	padding-top:15px;
+}
+.top-footer{
+	background-color:teal;
+}
+.bottom-footer{
+	background-color:#333;
+}
+.round-top-corners{
+	border-radius:10px 10px 0 0;
+}
+.footer-link{
+	color:#666;
+	padding:3px 6px;
+}
+.center{
+	width: 200px;
+	display:block;
+	text-align:center;
+	margin-left:auto;
+	margin-right:auto;
+}
+.wrapper {
+	min-height: 100%;
+	height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
+	height: 100%;
+	margin: 0 auto -5em; /* the bottom margin is the negative value of the footer's height */
+}
+.footer, .push {
+	height: 5em; /* .push must be the same height as .footer */
+}
+
+/*
+
+Sticky Footer by Ryan Fait
+http://ryanfait.com/
+
+*/
