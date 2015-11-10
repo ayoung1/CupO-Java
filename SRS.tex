@@ -1,0 +1,88 @@
+\documentclass[12pt]{article}
+\usepackage{fancyhdr}
+\setlength{\headheight}{15.2pt}
+\pagestyle{fancy}
+\fancyhead[l]{SRS}
+\fancyhead[c]{Cup of Java}
+\fancyhead[r]{EWU CSCD 350}
+%\fancyfoot[r]{Eastern Washington University}
+\begin{document}
+\noindent
+\thispagestyle{empty}
+\LARGE \\
+Trivia Maze\\
+Software Requirement Specifications\\
+by Cup of Java\\
+
+\pagebreak
+
+\noindent
+\normalsize
+\textbf{\Large 1.0 Introduction}
+
+This document will lay out the requirements, goals, and constraints for Cup of Java's Trivia Maze project for CSCD 350.\\
+
+\textbf{\Large1.1 Project Requirements}
+
+Outlined by Tom. Time frame, additional objectives\\
+
+Create a maze traversable by the user from entrance to exit. The maze will be composed of rooms containing one or more doors. To move into a new room, the user must answer a trivia question. Incorrectly answered questions will lock that particular door. The game is won on completion of the maze, and lost when no path to the end exists.\\
+
+Questions will be numbered, of multiple types (short answer, T/F, multiple choice) and stored in a SQLite database.\\
+
+There will be a visual representation of the maze for the user to interact with (possibly multiple).\\
+
+Variations on a theme are welcome (items to help the user, finite use powers, etc).\\
+
+Min size of maze is for rooms (no max specified). Entrance/exit may be random or fixed at opposite ends.\\
+
+User must be able to save/load (serialize game state)\\
+
+Provide admin tools for database editing\\
+
+Scrub user input\\
+
+Extra points for audio/video in question\\
+
+Unit Tests required\\
+
+OO principles, patterns where appropriate, and
+Interfaces where productive.\\
+
+\textbf{\Large 1.2 Additional Goals}
+
+Host the database online, allowing for a question entry portal and admin access.\\
+
+Scrape, format, and add questions from trivia sites such as j-archive.com (Jeopardy).\\
+
+Cheats for debugging.\\
+
+Random (solvable) maze generation\\
+
+Maze difficulty (paths to exit, categories/question difficulty)\\
+
+\textbf{\Large 1.3 Scope}
+
+Overlaps with above...\\
+
+
+\noindent
+\textbf{\Large 2.0 Usage Scenario}\\
+
+\noindent
+\textbf{\Large 3.0 Data Model}\\
+
+\noindent
+\textbf{\Large 4.0 Functional Model}\\
+
+\noindent
+\textbf{\Large 5.0 Behavioral Model}\\
+
+\noindent
+\textbf{\Large 6.0 Validation Criteria}\\
+
+\noindent
+\textbf{\Large 7.0 Appendices}\\
+Template: http://www.rspa.com/docs/Reqmspec.html
+
+\end{document}
