@@ -1,10 +1,13 @@
 var tableCount = 0;
 var offset = 20;
 var shown = false;
+var maxMultiple = 5
+var minMultiple = 2
+var minlength = 10
 
 function submitForm(ID){
 	if(isValidQuestion()){
-	
+		
 	}
 	else{
 		$("#errormsg").removeClass("hide");
@@ -29,7 +32,6 @@ function hideError(){
 
 function isValidQuestion(){
 	var question = $("#question").val().trim();
-	var minlength = 10;
 	
 	if(!question){
 		showError('Questions cannot be blank');
@@ -44,6 +46,7 @@ function isValidQuestion(){
 		return false;
 	}
 	hideError();
+	
 	return true;
 };
 
@@ -57,24 +60,24 @@ function display(section){
 };
 
 function addElement(){
-	if(tableCount < 5){
+	if(tableCount < maxMultiple){
 		tableCount++;
-		$("#multipletable").append('<span><input id="multipleanswer'+tableCount+'" type="text"/></span>');
+		$("#multipletable").append('<span><input id="multipleanswer'+tableCount+'" maxlength=50 type="text"/></span>');
 	}
 };
 
 function removeElement(){
-	if(tableCount > 2){
+	if(tableCount > minMultiple){
 		$("#multipleanswer"+tableCount).remove();
 		tableCount--;
 	}
-}
+};
 
 function setUpMultiples(){
 	
 	for(i=0; i < 3; i++){
 		tableCount++;
-		$("#multipletable").append('<input id="multipleanswer' + tableCount + '" type="text"/>');
+		$("#multipletable").append('<input id="multipleanswer' + tableCount + '" maxlength=50 type="text"/>');
 	}
 };
 
@@ -118,5 +121,15 @@ $(document).ready(function(){
 	$("#addbutton").click(function(){
 		event.preventDefault();
 		addElement();
+	});
+	
+	$('#utesttoggle').click(function(){
+		var test = $('#unittest');
+	
+		if(test.hasClass("hide")){
+			test.removeClass('hide');
+		}else{
+			test.addClass('hide');
+		}
 	});
 });

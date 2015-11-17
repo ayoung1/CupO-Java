@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SE Trivia Maze</title>
 	<link rel="stylesheet" href="css/foundation.css" />
+	<link rel="stylesheet" href="css/UnitTest/QUnit.css" />
 	<link rel="stylesheet" href="css/styles.css" />
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
@@ -13,6 +14,13 @@
   </head>
   <body>
     
+	<div id="unittest" class="hide">
+		<div id="qunit"></div>
+		<div id="qunit-fixture"></div>
+		<script src="js/UnitTest/QUnit.js"></script>
+		<script src="js/MyUnitTest.js"></script>
+	</div>
+	
 	<div class="wrapper">
 		<div class="row">
 			<div class="small-12 columns">
@@ -25,13 +33,13 @@
 			<div id="formbox" class="medium-12 columns">
 				<div class="medium-6 medium-offset-3 columns">
 					<p class="vertical-space">Question:</p>
-					<input id="question" type="text" autocomplete='yes'/>
+					<input id="question" type="text" maxlength=50/>
 					<div id="buttoncollection">
-						<span class="medium-offset-1">True/False <input type="radio" name="type" value="truefalse"/></span>
+						<span class=""><input id='radio1' type="radio" name="type" value="truefalse"/><label for='radio1'>True/False</label></span>
 						
-						<span class="medium-offset-1">One Word <input type="radio" name="type" value="oneword"/></span>
+						<span class="medium-offset-1"><input id='radio2' type="radio" name="type" value="oneword"/><label for='radio2'>One Word</label></span>
 						
-						<span class="medium-offset-1">Multiple Choice <input type="radio" name="type" value="multiplechoice"/></span>
+						<span class="medium-offset-1"><input id='radio3' type="radio" name="type" value="multiplechoice"/><label for='radio3'>Multiple Choice</label></span>
 						
 						<span><a id="help" class="tiny">?</a></span>
 					</div>
@@ -45,7 +53,7 @@
 						
 						<form id="oneword" class="hide">
 							<p>Answer:</p>
-							<span><input id="wordanswer" type="text"/></span>
+							<span><input id="wordanswer" type="text" maxlength=50/></span>
 							
 							<span class="medium-offset-5"><input type="button" name="submit" value="Submit!" data="oneword" class="button small radius vertical-space"/></span>
 						</form>
@@ -77,14 +85,11 @@
 			</div>
 			<div class="bottom-footer round-top-corners">
 				<div class="row">
-					<div class="large-4 medium-4 columns">
-						<p class="footer-link center">Admin? Click <a href="#">here</a> to login</p>
+					<div class="large-6 medium-6 columns">
+						<p class="footer-link center">Admin? Click <a href="#">here</a> to login.</p>
 					</div>
-					<div class="large-4 medium-4 columns">
-						
-					</div>
-					<div class="large-4 medium-4 columns">
-						
+					<div class="large-6 medium-6 columns">
+						<p class="footer-link center">Instructor? Click <a id='utesttoggle' href='#'>here</a> for unit tests.</p>
 					</div>
 				</div>
 			</div>
