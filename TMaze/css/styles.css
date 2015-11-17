@@ -5,6 +5,9 @@ html, body {
 	background-color:aliceblue;
 	height: 100%;
 }
+.vertical-space{
+	margin-top : 2em;
+}
 .nameplate{
 	padding-top:15px;
 }
