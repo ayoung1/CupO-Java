@@ -10,7 +10,7 @@ function submitForm(ID){
 		
 	}
 	else{
-		$("#errormsg").removeClass("hide");
+		
 	}
 };
 
@@ -62,13 +62,13 @@ function display(section){
 function addElement(){
 	if(tableCount < maxMultiple){
 		tableCount++;
-		$("#multipletable").append('<span><input id="multipleanswer'+tableCount+'" maxlength=50 type="text"/></span>');
+		$("#multipletable").append('<span><input id="multipleoption'+tableCount+'" maxlength=50 type="text"/></span>');
 	}
 };
 
 function removeElement(){
 	if(tableCount > minMultiple){
-		$("#multipleanswer"+tableCount).remove();
+		$("#multipleoption"+tableCount).remove();
 		tableCount--;
 	}
 };
@@ -77,7 +77,7 @@ function setUpMultiples(){
 	
 	for(i=0; i < 3; i++){
 		tableCount++;
-		$("#multipletable").append('<input id="multipleanswer' + tableCount + '" maxlength=50 type="text"/>');
+		$("#multipletable").append('<input id="multipleoption' + tableCount + '" maxlength=50 type="text"/>');
 	}
 };
 
