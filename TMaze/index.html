@@ -20,50 +20,39 @@
 		<script src="js/UnitTest/QUnit.js"></script>
 		<script src="js/MyUnitTest.js"></script>
 	</div>
-	
 	<div class="wrapper">
 		<div class="row">
 			<div class="small-12 columns">
 				<h1 class="medium-8 large-6 medium-offset-3">Trivia Maze Repository</h1>
 			</div>
 		</div>
-		
 		<div class="row">
-			
 			<div id="formbox" class="medium-12 columns">
 				<div class="medium-6 medium-offset-3 columns">
 					<p class="vertical-space">Question:</p>
 					<input id="question" type="text" maxlength=50/>
-					<div id="buttoncollection">
-						<span class=""><input id='radio1' type="radio" name="type" value="truefalse"/><label for='radio1'>True/False</label></span>
-						
-						<span class="medium-offset-1"><input id='radio2' type="radio" name="type" value="oneword"/><label for='radio2'>One Word</label></span>
-						
-						<span class="medium-offset-1"><input id='radio3' type="radio" name="type" value="multiplechoice"/><label for='radio3'>Multiple Choice</label></span>
-						
-						<span><a id="help" class="tiny">?</a></span>
+					<div id="buttoncollection" class="medium-offset-1">
+						<input id='radio1' type="radio" name="type" value="truefalse"/><label for='radio1'>True/False</label>
+						<input id='radio2' type="radio" name="type" value="oneword"/><label for='radio2'>Short Answer</label>
+						<input id='radio3' type="radio" name="type" value="multiplechoice"/><label for='radio3'>Multiple Choice</label>
+						<a id="help" class="tiny">?</a>
 					</div>
 					<div id="answerform" class="vertical-space">
 						<form id="truefalse" class="hide">
 							<span class="medium-offset-3">True <input type="radio" name="truefalse" value="true"/></span>
 							<span class="medium-offset-3">False <input type="radio" name="truefalse" value="false"/></span>
-							
 							<span class="medium-offset-5"><input type="button" name="submit" value="Submit!" data="truefalse" class="button small radius vertical-space"/></span>
 						</form>
-						
 						<form id="oneword" class="hide">
 							<p>Answer:</p>
 							<span><input id="wordanswer" type="text" maxlength=50/></span>
-							
 							<span class="medium-offset-5"><input type="button" name="submit" value="Submit!" data="oneword" class="button small radius vertical-space"/></span>
 						</form>
-						
 						<form id="multiplechoice" class="hide">
-							<p>Answer:</p>
+							<p>Answer: <span class='medium-1'><a id="multihelp" class="tiny">?</a></span></p>
 							<input id='multianswer' type='text' maxlength=50/>
 							<p>Options:</p>
-							<div id="multipletable"></div>
-							
+							<div id="multipletable"></div>		
 							<div class="medium-offset-1">
 								<input type="button" id="addbutton" value="Add" class="button tiny radius"/> 
 								<input type="button" id="removebutton" value="Remove" class="button tiny radius"/> 
@@ -74,12 +63,9 @@
 					<div id="errormsg" class="hide medium-offset-3"></div>
 				</div>
 			</div>
-			
 		</div>
-		
 		<div class="push"></div>
 	</div>
-	
     <footer class="footer">
 		<div class="top-footer">
 			<div>
@@ -95,8 +81,8 @@
 					</div>
 				</div>
 			</div>
-		</footer>
-	</div>
+		</div>
+	</footer>
     <script src="js/vendor/jquery.js"></script>
     <script src="js/foundation.min.js"></script>
     <script>

@@ -1,8 +1,8 @@
 var tableCount = 0;
 var offset = 20;
 var shown = false;
-var maxMultiple = 5
-var minMultiple = 2
+var maxMultiple = 4
+var minMultiple = 1
 var minlength = 10
 
 function submitForm(ID){
@@ -81,6 +81,22 @@ function setUpMultiples(){
 	}
 };
 
+function helpHover(doc, ID, message){
+	$('body').append("<div id='"+ID+"' style='position:fixed;'></div>");
+	$('#'+ ID).html(message);
+	$('#' + ID).css({
+		"top" : $(doc).offset().top + offset,
+		"left" : $(doc).offset().left + offset,
+		"background-color" : "lightblue",
+		"padding" : "5px",
+		"border-radius" : "10px"
+	})
+}
+
+function removeHover(ID){
+	$('#'+ID).remove();
+}
+
 $(document).ready(function(){
 	$("#question").val("Enter Your Question!");
 	
@@ -91,17 +107,18 @@ $(document).ready(function(){
 	});
 	
 	$('#help').hover(function(){
-		$('body').append("<div id='hoveringTooltip' style='position:fixed;'></div>");
-		$('#hoveringTooltip').html("Check the type of answer you want");
-		$('#hoveringTooltip').css({
-			"top" : $(this).offset().top + offset,
-			"left" : $(this).offset().left + offset,
-			"background-color" : "lightblue",
-			"padding" : "5px",
-			"border-radius" : "10px"
-		})},
+			helpHover(this, "helptooltip", "Check the type of answer you want");
+		},
 		function(){
-		$('#hoveringTooltip').remove();
+			removeHover("helptooltip");
+		}
+	);
+	
+	$('#multihelp').hover(function(){
+			helpHover(this, "helptooltip", "The answer will be included as an option");
+		},
+		function(){
+			removeHover("helptooltip");
 		}
 	);
 	
