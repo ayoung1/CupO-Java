@@ -1,14 +1,14 @@
 /*
-In order to test the path-finding algorithm values for the maze are used as follows:
-   [0 = Traversable], [1 = Wall], [2 = End], [3 = Traversed]
+*In order to test the path-finding algorithm values for the maze are used as follows:
+*   [0 = Traversable], [1 = Wall], [2 = End], [3 = Traversed]
 */
 
 public class Maze
 {
-   private int[][] grid;
-   private int curCol, curRow;
+   private Room[][] grid;
+   private int curCol, curRow, winCol, winRow;
    
-   public Maze(int[][] grid, int curCol, int curRow)
+   public Maze(Room[][] grid, int curCol, int curRow)
    {
       if (curCol < 0 || curRow < 0 || curRow >= grid.length || curCol >= grid[curCol].length)
       {
@@ -19,54 +19,66 @@ public class Maze
       this.curRow = curRow;
    }
    
+//    public Maze()
+//    {
+//       this.grid = generateMaze();     
+//    }
+   
    public boolean mazeIsSolvable()
    {
-      int[][] gridClone = copyGrid();
-      return traverseMaze(gridClone, this.curCol, this.curRow);
+      Room[][] gridClone = copyGrid();
+      return traverseMaze(gridClone, this.curCol, this.curRow, -1);
    }
    
-   private boolean traverseMaze(int[][] gridClone, int col, int row)
+   private boolean traverseMaze(Room[][] gridClone, int col, int row, int direction)
    {
       boolean pathFound = false;
-      if (validIndex(gridClone,col,row))
+      if (validDoor(gridClone,col,row,direction))
       {
-         if (gridClone[row][col] == 2)
+         if (col == this.winCol && row == this.winRow)
          {
             return true;
          }
-         gridClone[row][col] = 3;
-         pathFound = traverseMaze(gridClone,col+1, row);
+         if (direction != -1)
+         {
+            gridClone[row][col].adjustLock(direction, 4);
+         }
+         pathFound = traverseMaze(gridClone,col+1, row, 3);
          if (!pathFound)
          {
-            pathFound = traverseMaze(gridClone,col, row+1);
+            pathFound = traverseMaze(gridClone,col, row+1, 2);
          }
          if (!pathFound)
          {
-            pathFound = traverseMaze(gridClone,col-1,row);
+            pathFound = traverseMaze(gridClone,col-1,row, 1);
          }
          if (!pathFound)
          {
-            pathFound = traverseMaze(gridClone,col,row-1);
+            pathFound = traverseMaze(gridClone,col,row-1, 0);
          }
       }
       return pathFound;
    }
    
-   private boolean validIndex(int[][] gridClone, int col, int row)
+   private boolean validDoor(Room[][] gridClone, int col, int row, int direction)
    {
-      if ((col >= 0 && row >= 0 && row < gridClone.length && col < gridClone[row].length) && (gridClone[row][col] != 1 && gridClone[row][col] != 3))
+      if (direction == -1)
+      {
+         return true;
+      }
+      if ((col >= 0 && row >= 0 && row < gridClone.length && col < gridClone[row].length) && (!(gridClone[row][col].isLocked(direction))))
       {
          return true;
       }
       return false;
    }
    
-   private int[][] copyGrid()
+   private Room[][] copyGrid()
    {
-      int[][] newGrid = new int[this.grid.length][];
+      Room[][] newGrid = new Room[this.grid.length][];
       for (int i = 0; i < newGrid.length; i++)
       {
-         newGrid[i] = new int[this.grid[i].length];
+         newGrid[i] = new Room[this.grid[i].length];
          for (int j = 0; j < newGrid[i].length; j++)
          {
             newGrid[i][j] = this.grid[i][j];
@@ -74,4 +86,9 @@ public class Maze
       }
       return newGrid;
    }
+   
+//    private int[][] generateMaze()
+//    {
+//       return;
+//    }
 }
