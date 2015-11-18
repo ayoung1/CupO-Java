@@ -32,21 +32,25 @@ function hideError(){
 
 function isValidQuestion(){
 	var question = $("#question").val().trim();
+	var errormsg = "";
 	
 	if(!question){
-		showError('Questions cannot be blank');
+		errormsg += 'Questions cannot be blank ';
 		return false;
 	}
 	else if(question.length < minlength){
-		showError("Questions must be longer than "+minlength+" characters")
+		errormsg += 'Questions must be longer than '+minlength+' characters ';
 		return false
 	}
 	else if(question.substr(question.length - 1) != "?"){
-		showError("Questions must end with a '?'")
+		errormsg += "Questions must end with a '?'";
+		return false;
+	}	
+	if(errormsg){
+		showError(errormsg);
 		return false;
 	}
 	hideError();
-	
 	return true;
 };
 
@@ -73,10 +77,10 @@ function removeElement(){
 	}
 };
 
-function setUpMultiples(){
-	
-	for(i=0; i < 3; i++){
-		tableCount++;
+function setUpPage(){
+	$("#question").val("Enter Your Question!");
+	$("#adminfooter").append('<p id="questionfooter" class="footer-link center">Admin? Click <a id="changeform" href="login.html">here</a> to login.</p>');
+	for(tableCount; tableCount < 3; tableCount++){
 		$("#multipletable").append('<input id="multipleoption' + tableCount + '" maxlength=50 type="text"/>');
 	}
 };
@@ -97,10 +101,36 @@ function removeHover(ID){
 	$('#'+ID).remove();
 }
 
-$(document).ready(function(){
-	$("#question").val("Enter Your Question!");
+function toggleLogin(){
+	if($('#loginpage').hasClass('hide')){
+		$("#changeform").remove();
+		$("#adminfooter").append('<p id="questionfooter" class="footer-link center">Click <a id="changeform" href="#question">here</a> to submit a question.</p>')
+		$("#questionpage").addClass("hide");
+		$("#loginpage").removeClass("hide");
+	}else{
+		$("#changeform").remove();
+		$("#adminfooter").append('<p id="questionfooter" class="footer-link center">Admin? Click <a id="changeform" href="#admin">here</a> to login.</p>')
+		$("#questionpage").removeClass("hide");
+		$("#loginpage").addClass("hide");
+	}
+}
+
+function toggleUnitTests(){
+	var test = $('#unittest');
 	
-	setUpMultiples();
+	if(test.hasClass("hide")){
+		test.removeClass('hide');
+	}else{
+		test.addClass('hide');
+	}
+}
+
+$(document).ready(function(){
+	setUpPage();
+	
+	$('#changeform').click(function(){
+		toggleLogin();
+	});
 	
 	$('#question').on('input', function(){
 		hideError();
@@ -141,12 +171,6 @@ $(document).ready(function(){
 	});
 	
 	$('#utesttoggle').click(function(){
-		var test = $('#unittest');
-	
-		if(test.hasClass("hide")){
-			test.removeClass('hide');
-		}else{
-			test.addClass('hide');
-		}
+		toggleUnitTests();
 	});
 });

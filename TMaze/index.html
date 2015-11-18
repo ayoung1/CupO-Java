@@ -1,17 +1,17 @@
 <!doctype html>
 <html class="no-js" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SE Trivia Maze</title>
-	<link rel="stylesheet" href="css/foundation.css" />
-	<link rel="stylesheet" href="css/UnitTest/QUnit.css" />
-	<link rel="stylesheet" href="css/styles.css" />
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-    <script src="js/vendor/modernizr.js"></script>
-	<script src="js/MyScripts.js"></script>
-  </head>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Trivia Maze</title>
+		<link rel="stylesheet" href="css/foundation.css" />
+		<link rel="stylesheet" href="css/UnitTest/QUnit.css" />
+		<link rel="stylesheet" href="css/styles.css" />
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+		<script src="js/vendor/modernizr.js"></script>
+		<script src="js/MyScripts.js"></script>
+	</head>
   <body>
     
 	<div id="unittest" class="hide">
@@ -22,11 +22,11 @@
 	</div>
 	<div class="wrapper">
 		<div class="row">
-			<div class="small-12 columns">
+			<div class="small-12 columns vertical-space">
 				<h1 class="medium-8 large-6 medium-offset-3">Trivia Maze Repository</h1>
 			</div>
 		</div>
-		<div class="row">
+		<div id='questionpage' class="row">
 			<div id="formbox" class="medium-12 columns">
 				<div class="medium-6 medium-offset-3 columns">
 					<p class="vertical-space">Question:</p>
@@ -64,6 +64,15 @@
 				</div>
 			</div>
 		</div>
+		<div id='loginpage' class="row hide">
+			<form class='medium-offset-4'>
+				<p class='vertical-space'>Username</p>
+				<div class='medium-5'><input id='username' type='text' maxlength=50/></div>
+				<p class='vertical-space'>Password</p>
+				<div class='medium-5'><input id='password' type='password' maxlength=50/></div>
+				<input type='button' id='logsubmit' class='vertical-space radius button small' name='submit' value='Login'/>
+			</form>
+		</div>
 		<div class="push"></div>
 	</div>
     <footer class="footer">
@@ -73,11 +82,10 @@
 			</div>
 			<div class="bottom-footer round-top-corners">
 				<div class="row">
-					<div class="large-6 medium-6 columns">
-						<p class="footer-link center">Admin? Click <a href="#">here</a> to login.</p>
+					<div id='adminfooter' class="large-6 medium-6 columns">
 					</div>
 					<div class="large-6 medium-6 columns">
-						<p class="footer-link center">Instructor? Click <a id='utesttoggle' href='#'>here</a> for unit tests.</p>
+						<p class="footer-link center">Instructor? Click <a id='utesttoggle' href='#UnitTest'>here</a> for unit tests.</p>
 					</div>
 				</div>
 			</div>
@@ -88,5 +96,6 @@
     <script>
       $(document).foundation();
     </script>
+	
   </body>
 </html>
