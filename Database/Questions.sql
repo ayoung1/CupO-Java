@@ -33,7 +33,8 @@ create table MULTIPLE_CHOICE
 	answer varchar not null,
 	option_1 varchar not null,
 	option_2 varchar,
-	option_3 default null
+  option_3,
+	option_4 default null
 );
 
 create table TRUE_FALSE
