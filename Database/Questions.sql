@@ -30,11 +30,10 @@ create table MULTIPLE_CHOICE
 	num_options int(1) default 2,
 	question varchar not null,
 	answer varchar not null,
+	answer varchar not null,
 	option_1 varchar not null,
-	option_2 varchar not null,
-	option_3 varchar,
-	option_4 varchar,
-	option_5 varchar default null
+	option_2 varchar,
+	option_3 default null
 );
 
 create table TRUE_FALSE
