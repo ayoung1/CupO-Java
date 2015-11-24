@@ -4,8 +4,27 @@ var shown = false;
 var maxMultiple = 4
 var minMultiple = 1
 var minlength = 10
+var maxlength = 50
 
-function submitForm(ID){
+function login(){
+	var username = $("#username").val();
+	var pass = $('#password').val();
+	var msg = "";
+	
+	if($("#username").val().length == 0){
+		showError('Username cannot be blank');
+	}
+	else{
+		$.post('php/adminlog.php', {username: username, pass: pass}, function(data){
+			if(data === "Success"){
+				$(location).attr('href', 'php/adminpage.php');
+			}
+		})
+	}
+	
+}
+
+function submitQuestion(ID){
 	if(isValidQuestion()){
 		
 	}
@@ -35,16 +54,16 @@ function isValidQuestion(){
 	var errormsg = "";
 	
 	if(!question){
-		errormsg += 'Questions cannot be blank ';
-		return false;
+		errormsg += ' Questions cannot be blank ';
+		//return false;
 	}
-	else if(question.length < minlength){
-		errormsg += 'Questions must be longer than '+minlength+' characters ';
-		return false
+	if(question.length > maxlength || question.length < minlength){
+		errormsg += ' Questions must be between '+minlength+' and '+maxlength+' characters ';
+		//return false;
 	}
-	else if(question.substr(question.length - 1) != "?"){
-		errormsg += "Questions must end with a '?'";
-		return false;
+	if(question.substr(question.length - 1) != "?"){
+		errormsg += " Questions must end with a '?'";
+		//return false;
 	}	
 	if(errormsg){
 		showError(errormsg);
@@ -79,8 +98,8 @@ function removeElement(){
 
 function setUpPage(){
 	$("#question").val("Enter Your Question!");
-	$("#adminfooter").append('<p id="questionfooter" class="footer-link center">Admin? Click <a id="changeform" href="login.html">here</a> to login.</p>');
-	for(tableCount; tableCount < 3; tableCount++){
+	$("#adminfooter").append('<p id="questionfooter" class="footer-link center">Admin? Click <a id="changeform" href="#Admin">here</a> to login.</p>');
+	for(tableCount; tableCount >= 2; tableCount++){
 		$("#multipletable").append('<input id="multipleoption' + tableCount + '" maxlength=50 type="text"/>');
 	}
 };
@@ -103,16 +122,20 @@ function removeHover(ID){
 
 function toggleLogin(){
 	if($('#loginpage').hasClass('hide')){
-		$("#changeform").remove();
-		$("#adminfooter").append('<p id="questionfooter" class="footer-link center">Click <a id="changeform" href="#question">here</a> to submit a question.</p>')
+		$("#questionfooter").remove();
+		$("#adminfooter").append('<p id="questionfooter" class="footer-link center">Click <a id="changeform" href="#Question">here</a> to submit a question.</p>');
 		$("#questionpage").addClass("hide");
 		$("#loginpage").removeClass("hide");
 	}else{
-		$("#changeform").remove();
-		$("#adminfooter").append('<p id="questionfooter" class="footer-link center">Admin? Click <a id="changeform" href="#admin">here</a> to login.</p>')
+		$("#questionfooter").remove();
+		$("#adminfooter").append('<p id="questionfooter" class="footer-link center">Admin? Click <a id="changeform" href="#Admin">here</a> to login.</p>');
 		$("#questionpage").removeClass("hide");
 		$("#loginpage").addClass("hide");
 	}
+	$('#changeform').click(function(){
+		toggleLogin();
+	});
+	hideError();
 }
 
 function toggleUnitTests(){
@@ -152,8 +175,12 @@ $(document).ready(function(){
 		}
 	);
 	
+	$("#logsubmit").click(function(){
+		login();
+	});
+	
 	$("input:button[name=submit]").click(function(){
-		submitForm();
+		submitQuestion();
 	});
 	
 	$("input:radio[name=type]").click(function(){
