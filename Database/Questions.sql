@@ -12,7 +12,7 @@ create table USERS
 (
   user_name varchar unique not null,
   user_password varchar
-)
+);
 
 create table TRIVIA_QUESTIONS
 (
@@ -29,7 +29,6 @@ create table MULTIPLE_CHOICE
   references TRIVIA_QUESTIONS(question_num),
 	num_options int(1) default 2,
 	question varchar not null,
-	answer varchar not null,
 	answer varchar not null,
 	option_1 varchar not null,
 	option_2 varchar,
