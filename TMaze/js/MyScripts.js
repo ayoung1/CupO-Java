@@ -19,6 +19,9 @@ function login(){
 			if(data === "Success"){
 				$(location).attr('href', 'php/adminpage.php');
 			}
+			else{
+				showError(data);
+			}
 		})
 	}
 	
