@@ -1,6 +1,7 @@
-var tableCount = 0;
+var tableCount = 1;
 var offset = 20;
 var shown = false;
+var cleared = false;
 var maxMultiple = 4
 var minMultiple = 1
 var minlength = 10
@@ -11,8 +12,13 @@ function login(){
 	var pass = $('#password').val();
 	var msg = "";
 	
-	if($("#username").val().length == 0){
+	if(username.length == 0){
 		showError('Username cannot be blank');
+		return false;
+	}
+	else if(pass.length == 0){
+		showError('Password cannot be blank');
+		return false;
 	}
 	else{
 		$.post('php/adminlog.php', {username: username, pass: pass}, function(data){
@@ -22,7 +28,7 @@ function login(){
 			else{
 				showError(data);
 			}
-		})
+		});
 	}
 	
 }
@@ -30,10 +36,40 @@ function login(){
 function submitQuestion(ID){
 	if(isValidQuestion()){
 		
+		if(ID === 'oneword' && isValidOneWord()){
+			
+			$.post('php/addQuestion.php', {type: 'oneword', question: $('#question').val(), answer: $('wordanswer').val()}, function(data){
+				if(data === "Success"){
+					alert("Question submitted successfully");
+				}
+				else{
+					showError(data);
+				}
+			});
+			
+			return true;
+		}
+		else if(ID === 'multiplechoice' && isValidMultiple()){
+			
+			
+			
+			return true;
+		}
+		else if(ID === 'truefalse' && isValidTrueFalse()){
+			
+			$.post('php/addQuestion.php', {type: 'truefalse', question: $('#question').val(), answer: $("input:radio[name=truefalse]:checked").data('id')}, function(data){
+				if(data === "Success"){
+					alert("Question submitted successfully");
+				}
+				else{
+					showError(data);
+				}
+			});
+			
+			return true;
+		}
 	}
-	else{
-		
-	}
+	return false;
 };
 
 function showError(message){
@@ -51,6 +87,56 @@ function hideError(){
 		$('#tempmessage').remove();
 	}
 };
+
+function isValidMultiple(){
+	var answer = $('#multianswer').val();
+	
+	if(answer.length === 0){
+		showError(' Answer cannot be blank ');
+		return false;
+	}
+	else if(answer.length < minlength || answer.length > maxlength){
+		showError(' Answer must be between '+minlength+' and '+maxlength+' characters ');
+		return false;
+	}
+
+	for(var i = 1; i <= tableCount; i++)
+	{
+		answer = $('#multipleoption'+i).val();
+		
+		if(answer.length === 0){
+			showError(' Option ' + i + ' cannot be blank ');
+			return false;
+		}
+		else if(answer.length < minlength || answer.length > maxlength){
+			showError(' Option ' + i + ' must be between '+minlength+' and '+maxlength+' characters ');
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+function isValidTrueFalse(){
+	var answer = $("input:radio[name=truefalse]:checked").data('id');
+	
+	if(answer == 'true' || answer == 'false')
+		return true;
+		
+	alert('false');
+	return false;
+}
+
+function isValidOneWord(){
+	var answer = $("#wordanswer").val();
+	
+	if(answer.length < minlength || answer.length > maxlength){
+		showError(' Answer must be between '+minlength+' and '+maxlength+' characters ');
+		return false;
+	}
+	
+	return true;
+}
 
 function isValidQuestion(){
 	var question = $("#question").val().trim();
@@ -82,7 +168,7 @@ function display(section){
 	$("#multiplechoice").addClass("hide");
 	
 	$("#" + section).removeClass("hide");
-	$("#errormsg").addClass("hide");
+	hideError();
 };
 
 function addElement(){
@@ -102,9 +188,10 @@ function removeElement(){
 function setUpPage(){
 	$("#question").val("Enter Your Question!");
 	$("#adminfooter").append('<p id="questionfooter" class="footer-link center">Admin? Click <a id="changeform" href="#Admin">here</a> to login.</p>');
-	for(tableCount; tableCount >= 2; tableCount++){
+	for(tableCount; tableCount <= minMultiple; tableCount++){
 		$("#multipletable").append('<input id="multipleoption' + tableCount + '" maxlength=50 type="text"/>');
 	}
+	tableCount--;
 };
 
 function helpHover(doc, ID, message){
@@ -158,6 +245,13 @@ $(document).ready(function(){
 		toggleLogin();
 	});
 	
+	$('#question').focus(function(){
+		if(!cleared){
+			$('#question').val('');
+			cleared = !cleared;
+		}
+	});
+	
 	$('#question').on('input', function(){
 		hideError();
 	});
@@ -183,7 +277,7 @@ $(document).ready(function(){
 	});
 	
 	$("input:button[name=submit]").click(function(){
-		submitQuestion();
+		submitQuestion($(this).data('id'));
 	});
 	
 	$("input:radio[name=type]").click(function(){

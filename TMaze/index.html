@@ -40,14 +40,16 @@
 					</div>
 					<div id="answerform" class="vertical-space">
 						<form id="truefalse" class="hide">
-							<span class="medium-offset-3">True <input type="radio" name="truefalse" value="true"/></span>
-							<span class="medium-offset-3">False <input type="radio" name="truefalse" value="false"/></span>
-							<span class="medium-offset-5"><input type="button" name="submit" value="Submit!" data="truefalse" class="button small radius vertical-space"/></span>
+							<div class='medium-offset-3'>
+								<input class='medium-offset-1' id='trueradio' type="radio" name="truefalse" data-id="true"/><label for='trueradio'>True</label>
+								<input class='medium-offset-3' id='falseradio' type="radio" name="truefalse" data-id="false"/><label for='falseradio'>False</label>
+							</div>
+							<span class="medium-offset-5"><input type="button" name="submit" value="Submit!" data-id="truefalse" class="button small radius vertical-space"/></span>
 						</form>
 						<form id="oneword" class="hide">
 							<p>Answer:</p>
 							<span><input id="wordanswer" type="text" maxlength=50/></span>
-							<span class="medium-offset-5"><input type="button" name="submit" value="Submit!" data="oneword" class="button small radius vertical-space"/></span>
+							<span class="medium-offset-5"><input type="button" name="submit" value="Submit!" data-id="oneword" class="button small radius vertical-space"/></span>
 						</form>
 						<form id="multiplechoice" class="hide">
 							<p>Answer: <span class='medium-1'><a id="multihelp" class="tiny">?</a></span></p>
@@ -58,7 +60,7 @@
 								<input type="button" id="addbutton" value="Add" class="button tiny radius"/> 
 								<input type="button" id="removebutton" value="Remove" class="button tiny radius"/> 
 							</div>
-							<span class="medium-offset-5"><input type="button" name="submit" value="Submit!" data="multiplechoice" class="button small radius vertical-space"/></span>
+							<span class="medium-offset-5"><input type="button" name="submit" value="Submit!" data-id="multiplechoice" class="button small radius vertical-space"/></span>
 						</form>
 					</div>
 				</div>
