@@ -52,13 +52,17 @@ function submitQuestion(ID){
 			return true;
 		}
 		else if(ID === 'multiplechoice' && isValidMultiple()){
-			var options = [];
+			var choices = [];
 			
 			for(var i = 1; i <= tableCount; i++){
-				options[i-1] = $("#multipleoption" + i).val();
+				choices[i-1] = $("#multipleoption" + i).val();
 			}
 			
-			$.post('php/addQuestion.php', {type: 'multiple', question: $('#question').val(), answer: options}, function(data){
+			for(var i = tableCount+1; i <= maxMultiple; i++){
+				choices[i-1] = null;
+			}
+			
+			$.post('php/addQuestion.php', {type: 'multiple', question: $('#question').val(), answer: $('#multianswer').val(), numberoptions: tableCount, options: choices}, function(data){
 				if(data === "Success"){
 					alert("Question submitted successfully");
 					location.reload();

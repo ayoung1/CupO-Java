@@ -17,24 +17,19 @@
 			die();
 		}
 		
-		if($_POST['answer'] == 'true' || $_POST['answer'] == 'false'){
-			$answer = "NA";
+		if(isset($_POST['options'])){
+			$options = $_POST['options'];
 			
 			$mysqli = new mysqli($server, $user, $pw, $db);
 			
-			if($_POST['answer'] == 'true')
-				$answer = "T";
-			else
-				$answer = "F";
-			
-			if(!($stmt = $mysqli->prepare("INSERT INTO MULTIPLE_CHOICE VALUES(NULL,?,?)")))
+			if(!($stmt = $mysqli->prepare("INSERT INTO MULTIPLE_CHOICE VALUES(NULL,?,?,?,?,?,?,?)")))
 			{
 				echo "Prepare Failed";
 				$mysqli->close();
 				die();
 			}
 			
-			if(!$stmt->bind_param("ss", $answer, $_POST['question']))
+			if(!$stmt->bind_param("issssss", intval($_POST['numberoptions']), $_POST['question'], $_POST['answer'], $options[0], $options[1], $options[2], $options[3] ))
 			{
 				echo "Bind failed";
 				$mysqli->close();
