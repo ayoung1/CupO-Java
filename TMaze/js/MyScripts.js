@@ -2,10 +2,11 @@ var tableCount = 1;
 var offset = 20;
 var shown = false;
 var cleared = false;
-var maxMultiple = 4
-var minMultiple = 1
-var minlength = 10
-var maxlength = 50
+var maxMultiple = 4;
+var minMultiple = 1;
+var minlength = 10;
+var maxQuestionLength = 256;
+var maxlength = 50;
 
 function login(){
 	var username = $("#username").val();
@@ -38,9 +39,10 @@ function submitQuestion(ID){
 		
 		if(ID === 'oneword' && isValidOneWord()){
 			
-			$.post('php/addQuestion.php', {type: 'oneword', question: $('#question').val(), answer: $('wordanswer').val()}, function(data){
+			$.post('php/addQuestion.php', {type: 'oneword', question: $('#question').val(), answer: $('#wordanswer').val()}, function(data){
 				if(data === "Success"){
 					alert("Question submitted successfully");
+					location.reload();
 				}
 				else{
 					showError(data);
@@ -50,8 +52,21 @@ function submitQuestion(ID){
 			return true;
 		}
 		else if(ID === 'multiplechoice' && isValidMultiple()){
+			var options = [];
 			
+			for(var i = 1; i <= tableCount; i++){
+				options[i-1] = $("#multipleoption" + i).val();
+			}
 			
+			$.post('php/addQuestion.php', {type: 'multiple', question: $('#question').val(), answer: options}, function(data){
+				if(data === "Success"){
+					alert("Question submitted successfully");
+					location.reload();
+				}
+				else{
+					showError(data);
+				}
+			});
 			
 			return true;
 		}
@@ -60,6 +75,7 @@ function submitQuestion(ID){
 			$.post('php/addQuestion.php', {type: 'truefalse', question: $('#question').val(), answer: $("input:radio[name=truefalse]:checked").data('id')}, function(data){
 				if(data === "Success"){
 					alert("Question submitted successfully");
+					location.reload();
 				}
 				else{
 					showError(data);
@@ -102,13 +118,17 @@ function isValidMultiple(){
 
 	for(var i = 1; i <= tableCount; i++)
 	{
-		answer = $('#multipleoption'+i).val();
+		var options = $('#multipleoption'+i).val();
 		
-		if(answer.length === 0){
+		if(options.length === 0){
 			showError(' Option ' + i + ' cannot be blank ');
 			return false;
 		}
-		else if(answer.length < minlength || answer.length > maxlength){
+		else if(options === answer){
+			showError(' Option ' + i + ' cannot match the answer');
+			return false;
+		}
+		else if(options.length < minlength || options.length > maxlength){
 			showError(' Option ' + i + ' must be between '+minlength+' and '+maxlength+' characters ');
 			return false;
 		}
@@ -120,10 +140,12 @@ function isValidMultiple(){
 function isValidTrueFalse(){
 	var answer = $("input:radio[name=truefalse]:checked").data('id');
 	
-	if(answer == 'true' || answer == 'false')
+	if(answer.toString() === "true" || answer.toString() === "false"){
 		return true;
-		
-	alert('false');
+	}
+	
+	showError(" Please Select an Option ");
+	
 	return false;
 }
 
@@ -146,14 +168,14 @@ function isValidQuestion(){
 		errormsg += ' Questions cannot be blank ';
 		//return false;
 	}
-	if(question.length > maxlength || question.length < minlength){
-		errormsg += ' Questions must be between '+minlength+' and '+maxlength+' characters ';
+	if(question.length > maxQuestionLength || question.length < minlength){
+		errormsg += ' Questions must be between '+minlength+' and '+maxQuestionLength+' characters ';
 		//return false;
 	}
 	if(question.substr(question.length - 1) != "?"){
 		errormsg += " Questions must end with a '?'";
 		//return false;
-	}	
+	}
 	if(errormsg){
 		showError(errormsg);
 		return false;
