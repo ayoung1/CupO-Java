@@ -22,7 +22,43 @@ public class Room
       this.westDoor = westDoor;
    }
    
-   public boolean isLocked(int direction)
+   public int getNorthDoor()
+   {
+      return this.northDoor;
+   }
+   public int getEastDoor()
+   {
+      return this.eastDoor;
+   }
+   public int getSouthDoor()
+   {
+      return this.southDoor;
+   }
+   public int getWestDoor()
+   {
+      return this.westDoor;
+   }
+   public int checkDirection(int direction)
+   {
+      if (direction == NORTH)
+      {
+         return this.northDoor;
+      }
+      else if (direction == EAST)
+      {
+         return this.eastDoor;
+      }
+      else if (direction == SOUTH)
+      {
+         return this.southDoor;
+      }
+      else if (direction == WEST)
+      {
+         return this.westDoor;
+      }
+      return -1;    
+   }
+   public boolean isPassable(int direction)
    {
       if (direction == NORTH)
       {
@@ -45,7 +81,7 @@ public class Room
    
    private boolean checkLock(int lock)
    {
-      if (lock == 0)
+      if (lock == TRUELOCK)
       {
          return false;
       }
@@ -70,5 +106,58 @@ public class Room
       {
          this.westDoor = key;
       }      
+   }
+   
+   public void printRoom()
+   {
+      String output = "";
+      if (this.westDoor == 2)
+      {
+         output += "|";
+      }
+      else
+      {
+         output += " ";
+      }
+      if (this.northDoor == 2 && this.southDoor == 2)
+      {
+         output += "=";
+         if (this.eastDoor == 2)
+         {
+            output += "|";
+         }
+         else
+         {
+            output += " ";
+         }
+      }
+      else
+      {
+         if (this.northDoor == 2)
+         {
+            output += "¯";
+         }
+         else 
+         {
+            output += " ";
+         }
+         if (this.southDoor == 2)
+         {
+            output += "_";
+         }
+         else
+         {
+            output += " ";
+         }
+         if (this.eastDoor == 2)
+         {
+            output += "|";
+         }
+         else
+         {
+            output += " ";
+         }
+      }
+      System.out.print(output);
    }
 }
