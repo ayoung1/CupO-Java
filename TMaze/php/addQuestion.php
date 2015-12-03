@@ -1,11 +1,20 @@
 <?php
-	function verifyQuestion(){
+	function quit($message, $mysqli){
+		echo $message;
+		$mysqli->close();
+		die();
+	}
+
+	function verifyQuestion($creds){
+		include $creds;
+		
+		if(!isset($_POST['question'])){
+			quit('Question not set');
+		}
 		if(strlen($_POST['question']) < 10 || strlen($_POST['question']) > 50){
-			echo "Failed";
-			die();
+			quit('Question length error');
 		}else if(substr($_POST['question'], -1) != '?'){
-			echo "Failed";
-			die();
+			quit("Question missing '?'" );
 		}
 	}
 	
@@ -47,6 +56,7 @@
 			die();
 		}
 		echo "Success";
+		$mysqli->close();
 	}
 	
 	function submitTrueFalse($creds){
@@ -92,6 +102,7 @@
 			die();
 		}
 		echo "Success";
+		$mysqli->close();
 	}
 	
 	function submitOneWord($creds){
@@ -131,11 +142,12 @@
 			die();
 		}
 		echo "Success";
+		$mysqli->close();
 	}
 	
 	$questionType = $_POST['type'];
 	
-	verifyQuestion();
+	verifyQuestion('creds.php');
 	
 	if($questionType == 'truefalse'){
 		submitTrueFalse("creds.php");

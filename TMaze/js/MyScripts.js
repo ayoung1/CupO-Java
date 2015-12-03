@@ -264,10 +264,47 @@ function toggleUnitTests(){
 	}
 }
 
+function deleteElement(dataId){	
+	if($("input:radio[name=type]:checked").val() == 'truefalse'){
+		$.post("tables/delete.php", {id : dataId, table : 'TRUE_FALSE'},
+			function(data){
+				if(data === "Success"){
+					$("#truefalse").load(location.href+" #truefalse>*",function(){
+						$("#truefalse input:button[name=delete]").on("click", function(){
+							deleteElement($(this).data('id'));
+						});
+					});
+				}
+			});
+	}else if($("input:radio[name=type]:checked").val() == 'oneword'){
+		$.post("tables/delete.php", {id : dataId, table : 'SHORT_ANSWER'},
+			function(data){
+				if(data === "Success"){
+					$("#oneword").load(location.href+" #oneword>*",function(){
+						$("#oneword input:button[name=delete]").on("click", function(){
+							deleteElement($(this).data('id'));
+						});
+					});
+				}
+			});
+	}else if($("input:radio[name=type]:checked").val() == 'multiplechoice'){
+		$.post("tables/delete.php", {id : dataId, table : 'MULTIPLE_CHOICE'},
+			function(data){
+				if(data === "Success"){
+					$("#multiplechoice").load(location.href+" #multiplechoice>*",function(){
+						$("#multiplechoice input:button[name=delete]").on("click", function(){
+							deleteElement($(this).data('id'));
+						});
+					});
+				}
+			});
+	}
+}
+
 $(document).ready(function(){
 	setUpPage();
 	
-	$('#changeform').click(function(){
+	$('#changeform').on("click", function(){
 		toggleLogin();
 	});
 	
@@ -298,29 +335,33 @@ $(document).ready(function(){
 		}
 	);
 	
-	$("#logsubmit").click(function(){
+	$("#logsubmit").on("click", function(){
 		login();
 	});
 	
-	$("input:button[name=submit]").click(function(){
+	$("input:button[name=delete]").on("click", function(){
+		deleteElement($(this).data('id'));
+	});
+	
+	$("input:button[name=submit]").on("click", function(){
 		submitQuestion($(this).data('id'));
 	});
 	
-	$("input:radio[name=type]").click(function(){
+	$("input:radio[name=type]").on("click", function(){
 		display($(this).val());
 	});
 	
-	$("#removebutton").click(function(){
+	$("#removebutton").on("click", function(){
 		event.preventDefault();
 		removeElement();
 	});
 	
-	$("#addbutton").click(function(){
+	$("#addbutton").on("click", function(){
 		event.preventDefault();
 		addElement();
 	});
 	
-	$('#utesttoggle').click(function(){
+	$('#utesttoggle').on("click", function(){
 		toggleUnitTests();
 	});
 });

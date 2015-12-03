@@ -5,6 +5,13 @@ html, body {
 	background-color:aliceblue;
 	height: 100%;
 }
+table tr:nth-child(even) td{
+	background-color : #bee;
+}
+.wrap-content{
+	width : 1%;
+	white-space : nowrap;
+}
 .vertical-space{
 	margin-top : 2em;
 }

@@ -42,9 +42,34 @@
 						<input id='radio3' class='medium-offset-1' type="radio" name="type" value="multiplechoice"/><label for='radio3'>Multiple Choice</label>
 					</div>
 					
-					<div id='truefalse' class='vertical-space medium-12'>
+					<table id='truefalse' class='vertical-space medium-12 hide'>
+						<tr class="header">
+							<td><p>Question</p></td>
+							<td><p>Answer</p></td>
+							<td class='wrap-content'><p>Delete</p></td>
+						</tr>
 						<?php include 'tables/tftable.php'; ?>
-					</div>
+					</table>
+					<table id='oneword' class='vertical-space medium-12 hide'>
+						<tr class="header">
+							<td><p>Question</p></td>
+							<td><p>Answer</p></td>
+							<td class='wrap-content'><p>Delete</p></td>
+						</tr>
+						<?php include 'tables/satable.php'; ?>
+					</table>
+					<table id='multiplechoice' class='vertical-space medium-12 hide'>
+						<tr class="header">
+							<td><p>Question</p></td>
+							<td><p>Answer</p></td>
+							<td><p>Opt 1</p></td>
+							<td><p>Opt 2</p></td>
+							<td><p>Opt 3</p></td>
+							<td><p>Opt 4</p></td>
+							<td class='wrap-content'><p>Delete</p></td>
+						</tr>
+						<?php include 'tables/mctable.php'; ?>
+					</table>
 				</div>
 			</div>
 			

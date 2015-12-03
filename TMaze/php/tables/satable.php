@@ -7,7 +7,7 @@
 		echo("Connect failed: %s\n". mysqli_connect_error());
         die();
 	}
-	if(!$stmt = $mysqli->prepare("SELECT * FROM TRUE_FALSE")){
+	if(!$stmt = $mysqli->prepare("SELECT * FROM SHORT_ANSWER")){
 		echo "Prepare Failed";
 		$mysqli->close();
 		die();
@@ -19,7 +19,7 @@
 		die();
 	}
 	
-	$stmt->bind_result($id, $answer, $question);
+	$stmt->bind_result($id, $question, $answer);
 	$stmt->store_result();
 	
 	while($stmt->fetch()){

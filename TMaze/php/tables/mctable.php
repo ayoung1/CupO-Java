@@ -7,7 +7,7 @@
 		echo("Connect failed: %s\n". mysqli_connect_error());
         die();
 	}
-	if(!$stmt = $mysqli->prepare("SELECT * FROM TRUE_FALSE")){
+	if(!$stmt = $mysqli->prepare("SELECT * FROM MULTIPLE_CHOICE")){
 		echo "Prepare Failed";
 		$mysqli->close();
 		die();
@@ -19,7 +19,7 @@
 		die();
 	}
 	
-	$stmt->bind_result($id, $answer, $question);
+	$stmt->bind_result($id, $optnum, $question, $answer, $op1, $op2, $op3, $op4);
 	$stmt->store_result();
 	
 	while($stmt->fetch()){
@@ -27,6 +27,11 @@
 		
 		echo "<td><p>".$question."</p></td>";
 		echo "<td><p>".$answer."</p></td>";
+		
+		echo "<td><p>".$op1."</p></td>";
+		echo "<td><p>".$op2."</p></td>";
+		echo "<td><p>".$op3."</p></td>";
+		echo "<td><p>".$op4."</p></td>";
 		
 		echo "<td class='wrap-content'><input type='button' name='delete' data-id='".$id."' value='Delete'></td>";
 		
