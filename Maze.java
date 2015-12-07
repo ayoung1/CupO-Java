@@ -1,8 +1,12 @@
+package trivia;
+
 import java.util.Random;
+import java.util.Scanner;
 
 public class Maze
 {
    private Room[][] grid;
+   private char[][] charGrid;
    private int curCol, curRow, winCol, winRow;
    
    public Maze(Room[][] grid, int curCol, int curRow, int winCol, int winRow)
@@ -16,11 +20,13 @@ public class Maze
       this.curRow = curRow;
       this.winCol = winCol;
       this.winRow = winRow;
+      createCharGrid();
    }
    
    public Maze(String difficulty)
    {
-      generateMaze(difficulty);     
+      generateMaze(difficulty);
+      createCharGrid();    
    }
    
    public boolean mazeIsSolvable()
@@ -201,22 +207,204 @@ public class Maze
          neighbor = rng.nextInt(4);
          if (neighbors[neighbor] == true)
          {
-            return neighbor;
+            break;
          }
          neighbor = -2;
       }
-      return -1;
+      return neighbor;
    }
    
-   public void printMaze()
+   private void createCharGrid()
    {
+	  char[][] printGrid = new char[(this.grid.length*2)+1][(this.grid.length*2)+1];
+	  for (int i = 0; i < printGrid.length; i++)
+	  {
+		  for (int j = 0; j < printGrid.length; j++)
+		  {
+			  printGrid[i][j] = 'W';
+		  }
+	  }
       for (int i = 0; i < this.grid.length; i++)
       {
          for (int j = 0; j < this.grid[i].length; j++)
          {
-            grid[i][j].printRoom();
+            if (this.grid[i][j].allLocked())
+            {
+               printGrid[(i*2)+1][(j*2)+1] = 'W';
+            }
+            else if (this.curCol == j && this.curRow == i)
+            {
+               printGrid[(i*2)+1][(j*2)+1] = 'P';
+            }
+            else if (this.winCol == j && this.curRow == i)
+            {
+               printGrid[(i*2)+1][(j*2)+1] = 'F';
+            }
+            else
+            {
+               printGrid[(i*2)+1][(j*2)+1] = 'O';
+            }
+            if (this.grid[i][j].getSouthDoor() == 2)
+            {
+            	printGrid[(i*2)+2][(j*2)+1] = 'W';
+            }
+            else if (this.grid[i][j].getSouthDoor() == 0)
+            {
+            	printGrid[(i*2)+2][(j*2)+1] = 'O';
+            }
+            else
+            {
+            	printGrid[(i*2)+2][(j*2)+1] = 'D';
+            }
+            if (this.grid[i][j].getEastDoor() == 2)
+            {
+            	printGrid[(i*2)+1][(j*2)+2] = 'W';
+            }
+            else if (this.grid[i][j].getEastDoor() == 0)
+            {
+            	printGrid[(i*2)+1][(j*2)+2] = 'O';
+            }
+            else
+            {
+            	printGrid[(i*2)+1][(j*2)+2] = 'D';
+            }
+         }
+      }
+      this.charGrid = printGrid;
+   }
+   
+   public void printMaze()
+   {
+      for (int i = 0; i < this.charGrid.length; i++)
+      {
+         for (int j = 0; j < this.charGrid[i].length; j++)
+         {
+            System.out.print(this.charGrid[i][j]);
          }
          System.out.print("\n");
       }
-   }   
+   }
+   
+   public void playGame()
+   {
+	   boolean youWon = false;
+	   int charCurRow, charCurCol;
+	   while (mazeIsSolvable())
+	   {
+		   charCurRow = (this.curRow * 2) + 1;
+		   charCurCol = (this.curCol * 2) + 1;
+		   if (curRow == winRow && curCol == winCol)
+		   {
+			   youWon = true;
+			   break;
+		   }
+		   printMaze();
+		   // user input through function
+		   int direction = 0;
+		   if (direction == 0)
+		   {
+			   if (charGrid[charCurRow+1][charCurCol] != 'W')
+			   {
+				   if (charGrid[charCurRow+1][charCurCol] == 'D')
+				   {
+					   if (correctAns())
+					   {
+						   charGrid[charCurRow+1][charCurCol] = 'U';
+						   this.grid[curRow][curCol].adjustLock(0,0);
+						   this.grid[curRow-1][curCol].adjustLock(2,0);
+						   this.curRow += + 1;
+					   }
+					   else
+					   {
+						   charGrid[charCurRow+1][charCurCol] = 'W';
+						   this.grid[curRow][curCol].adjustLock(0,2);
+						   this.grid[curRow-1][curCol].adjustLock(2,2);
+					   }
+				   }
+				   else
+				   {
+					   this.curRow += 1;
+				   }
+			   }
+		   }
+		   else if (direction == 1)
+		   {
+			   if (charGrid[charCurRow][charCurCol+1] != 'W')
+			   {
+				   if (charGrid[charCurRow][charCurCol+1] == 'D')
+				   {
+					   if (correctAns())
+					   {
+						   charGrid[charCurRow][charCurCol+1] = 'U';
+						   this.grid[curRow][curCol].adjustLock(1,0);
+						   this.grid[curRow][curCol+1].adjustLock(3,0);
+						   this.curCol += 1;
+					   }
+					   else
+					   {
+						   charGrid[charCurRow][charCurCol+1] = 'W';
+						   this.grid[curRow][curCol].adjustLock(1,2);
+						   this.grid[curRow][curCol+1].adjustLock(3,2);
+					   }
+				   }
+				   else
+				   {
+					   this.curCol += 1;
+				   }
+			   }
+		   }
+		   else if (direction == 2)
+		   {
+			   if (charGrid[charCurRow-1][charCurCol] != 'W')
+			   {
+				   if (charGrid[charCurRow-1][charCurCol] == 'D')
+				   {
+					   if (correctAns())
+					   {
+						   charGrid[charCurRow-1][charCurCol] = 'U';
+						   this.grid[curRow][curCol].adjustLock(2,0);
+						   this.grid[curRow-1][curCol].adjustLock(0,0);
+						   this.curRow -= 1;
+					   }
+					   else
+					   {
+						   charGrid[charCurRow-1][charCurCol] = 'W';
+						   this.grid[curRow][curCol].adjustLock(2,2);
+						   this.grid[curRow-1][curCol+1].adjustLock(0,2);
+					   }
+				   }
+				   else
+				   {
+					   this.curRow -= 1;
+				   }
+			   }
+		   }
+		   else if (direction == 3)
+		   {
+			   if (charGrid[charCurRow][charCurCol-1] != 'W')
+			   {
+				   if (charGrid[charCurRow][charCurCol-1] == 'D')
+				   {
+					   if (correctAns())
+					   {
+						   charGrid[charCurRow][charCurCol-1] = 'U';
+						   this.grid[curRow][curCol].adjustLock(3,0);
+						   this.grid[curRow][curCol-1].adjustLock(1,0);
+						   this.curCol -= 1;
+					   }
+					   else
+					   {
+						   charGrid[charCurRow-1][charCurCol] = 'W';
+						   this.grid[curRow][curCol].adjustLock(3,2);
+						   this.grid[curRow-1][curCol+1].adjustLock(1,2);
+					   }
+				   }
+				   else
+				   {
+					   this.curCol -= 1;
+				   }
+			   }
+		   }
+	   }
+   }
 }

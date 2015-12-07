@@ -1,3 +1,5 @@
+package trivia;
+
 public class Room
 {
    private static final int UNLOCKED = 0, NORTH = 0, LOCKED = 1, EAST = 1, TRUELOCK = 2, SOUTH = 2, WEST = 3;
@@ -88,6 +90,15 @@ public class Room
       return true;
    }
    
+   public boolean allLocked()
+   {
+      if (this.northDoor == TRUELOCK && this.eastDoor == TRUELOCK && this.westDoor == TRUELOCK && this.southDoor == TRUELOCK)
+      {
+         return true;
+      }
+      return false;
+   }
+   
    public void adjustLock(int direction, int key)
    {
       if (direction == NORTH)
@@ -106,58 +117,5 @@ public class Room
       {
          this.westDoor = key;
       }      
-   }
-   
-   public void printRoom()
-   {
-      String output = "";
-      if (this.westDoor == 2)
-      {
-         output += "|";
-      }
-      else
-      {
-         output += " ";
-      }
-      if (this.northDoor == 2 && this.southDoor == 2)
-      {
-         output += "=";
-         if (this.eastDoor == 2)
-         {
-            output += "|";
-         }
-         else
-         {
-            output += " ";
-         }
-      }
-      else
-      {
-         if (this.northDoor == 2)
-         {
-            output += "¯";
-         }
-         else 
-         {
-            output += " ";
-         }
-         if (this.southDoor == 2)
-         {
-            output += "_";
-         }
-         else
-         {
-            output += " ";
-         }
-         if (this.eastDoor == 2)
-         {
-            output += "|";
-         }
-         else
-         {
-            output += " ";
-         }
-      }
-      System.out.print(output);
    }
 }
