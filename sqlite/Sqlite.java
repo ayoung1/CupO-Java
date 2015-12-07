@@ -12,24 +12,28 @@ public class Sqlite {
 	public static final int SHORT_ANSWER = 1;
 	public static final int MULTIPLE_CHOICE = 2;
 	
-	private final int TF_LENGTH = 3;
-	private final int SA_LENGTH = 3;
-	private final int MC_MIN = 4;
-	private final int MC_MAX = 7;
+	private static final int TF_LENGTH = 2;
+	private static final int SA_LENGTH = 2;
+	private static final int MC_MIN = 3;
+	private static final int MC_MAX = 6;
+	
 	private final String truefalse = "true_false";
 	private final String shortanswer = "short_answer";
 	private final String multiplechoice = "multiple_choice";
 	
-	private int[][] exclusions;
+	private int[] exclusions;
+	private int autoIncrement = 0;
 	private ArrayList<Question> pulledQuestions;
 	private Connection connect;
+	private String dbName;
 	
 	public Sqlite(){
 		this.pulledQuestions = new ArrayList<Question>();
 	}
 	
 	public boolean connect(String databaseName){
-		File db = new File(databaseName);
+		this.dbName = databaseName;
+		File db = new File(dbName);
 		boolean existed = db.exists();
 		
 		try {
@@ -37,18 +41,22 @@ public class Sqlite {
 	      connect = DriverManager.getConnection("jdbc:sqlite:"+databaseName);
 	    } catch ( Exception e ) {
 	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-	      System.exit(0);
 	    }
 	    System.out.println("Opened database successfully");
-	    this.exclusions = new int[Sqlite.MULTIPLE_CHOICE+1][];
-	    for(int i = 0; i < Sqlite.MULTIPLE_CHOICE+1; i++)
-	    	this.exclusions[i] = new int[0];
+	    this.exclusions = new int[0];
 	    
 	    if(!existed){
+	    	this.autoIncrement = 0;
 	    	createTables();
+	    }else{
+	    	setLargestId();
 	    }
 	    
 		return !existed;
+	}
+	
+	private void setLargestId(){
+		this.autoIncrement = countArchive();
 	}
 	
 	public void disconnect(){
@@ -57,8 +65,18 @@ public class Sqlite {
 			System.out.println("Closed database successfully");
 		} catch (SQLException e) {
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-		    System.exit(0);
 		}
+	}
+	
+	public boolean clearDatabase(){
+		File file = new File(dbName);
+		
+		if(!file.exists())
+			return false;
+		disconnect();
+		
+		file.delete();
+		return true;
 	}
 	
 	private void createTables(){
@@ -129,10 +147,8 @@ public class Sqlite {
 	    System.out.println("Table created successfully");
 	}
 	
-	public void setExclusions(int[] trueFalse, int[] shortAnswer, int[] multipleChoice){
-		this.exclusions[Sqlite.TRUE_FALSE] = trueFalse;
-		this.exclusions[Sqlite.SHORT_ANSWER] = shortAnswer;
-		this.exclusions[Sqlite.MULTIPLE_CHOICE] = multipleChoice;
+	public void setExclusions(int[] exclusions){
+		this.exclusions = exclusions;
 	}
 	
 	
@@ -172,7 +188,7 @@ public class Sqlite {
 	
 	private void insertTrueFalse(String[] args){
 		String sql = "INSERT INTO "+ truefalse +"(question_num, question, answer)"+
-					"VALUES(" + args[0] + ",'" + args[1] + "', '" + args[2] + "')";
+					"VALUES(" + this.autoIncrement++ + ",'" + args[0] + "', '" + args[1] + "')";
 		Statement stmt = null;
 		
 		try {
@@ -186,7 +202,7 @@ public class Sqlite {
 	
 	private void insertShortAnswer(String[] args){
 		String sql = "INSERT INTO "+ shortanswer +"(question_num, question, answer_components)"+
-				"VALUES(" + args[0] + ",'" + args[1] + "', '" + args[2] + "')";
+				"VALUES(" + this.autoIncrement++ + ",'" + args[0] + "', '" + args[1] + "')";
 		Statement stmt = null;
 		
 		try {
@@ -199,9 +215,9 @@ public class Sqlite {
 	}
 	
 	private void insertMultipleChoice(String[] args){
-		int options = args.length - 3;
+		int options = args.length - 2;
 		String sql = "INSERT INTO "+ multiplechoice +"(question_num, num_options, question, answer, option_1, option_2, option_3, option_4)"+
-				"VALUES(" + args[0] + options + ",'" + args[1] + "', '" + args[2] + ",'" + args[3] + "', '" + args[4] + "', '" + args[5] + "', '" + args[6] + "')";
+				"VALUES(" + this.autoIncrement++ + options + ",'" + args[0] + "', '" + args[1] + ",'" + args[2] + "', '" + args[3] + "', '" + args[4] + "', '" + args[5] + "')";
 		Statement stmt = null;
 		
 		try {
@@ -224,7 +240,7 @@ public class Sqlite {
 		for(String table : tables){
 			sql = "SELECT COUNT(question_num) FROM " + table;
 			
-			sql = addException(index, sql);
+			sql = addException(sql);
 			
 			try {
 				stmt = connect.createStatement();
@@ -243,12 +259,12 @@ public class Sqlite {
 		return count;
 	}
 	
-	private String addException(int table, String sql){
-		if(this.exclusions[table].length > 0){
+	private String addException(String sql){
+		if(this.exclusions.length > 0){
 			sql += " WHERE ";
-			for(int i = 0; i < this.exclusions[table].length; i++){
-				sql += "question_num <> " + this.exclusions[table][i];
-				if(i != this.exclusions[table].length-1){
+			for(int i = 0; i < this.exclusions.length; i++){
+				sql += "question_num <> " + this.exclusions[i];
+				if(i != this.exclusions.length-1){
 					sql += " AND ";
 				}
 			}
@@ -265,7 +281,7 @@ public class Sqlite {
 		int index = Sqlite.TRUE_FALSE;
 		
 		sql = "SELECT * FROM " + truefalse;
-		sql = addException(index, sql);
+		sql = addException(sql);
 		try{
 			stmt = connect.createStatement();
 			stmt.execute(sql);
@@ -288,7 +304,7 @@ public class Sqlite {
 		int index = Sqlite.SHORT_ANSWER;
 		
 		sql = "SELECT * FROM " + shortanswer;
-		sql = addException(index, sql);
+		sql = addException(sql);
 		try{
 			stmt = connect.createStatement();
 			stmt.execute(sql);
@@ -311,7 +327,7 @@ public class Sqlite {
 		int index = Sqlite.MULTIPLE_CHOICE;
 		
 		sql = "SELECT * FROM " + multiplechoice;
-		sql = addException(index, sql);
+		sql = addException(sql);
 		try{
 			stmt = connect.createStatement();
 			stmt.execute(sql);

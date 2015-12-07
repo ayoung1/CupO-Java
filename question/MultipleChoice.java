@@ -18,8 +18,8 @@ public class MultipleChoice extends Question {
 		args.put("id", ""+this.getId());
 		args.put("question", this.getQuestion());
 		args.put("answer", this.getAnswer());
-		for(int i = 0; i < this.options.length; i++)
-			args.put("option"+i, options[i]);
+		for(int i = 1; i <= this.options.length; i++)
+			args.put("option"+i, options[i-1]);
 		
 		return args;
 	}
