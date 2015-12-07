@@ -1,3 +1,6 @@
+/*
+ * Aaron Young
+ */
 package sqlite;
 
 import java.io.File;
@@ -33,12 +36,12 @@ public class Sqlite {
 	
 	public boolean connect(String databaseName){
 		this.dbName = databaseName;
-		File db = new File(dbName);
+		File db = new File(this.dbName);
 		boolean existed = db.exists();
 		
 		try {
 	      Class.forName("org.sqlite.JDBC");
-	      connect = DriverManager.getConnection("jdbc:sqlite:"+databaseName);
+	      this.connect = DriverManager.getConnection("jdbc:sqlite:"+databaseName);
 	    } catch ( Exception e ) {
 	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 	    }
@@ -61,7 +64,7 @@ public class Sqlite {
 	
 	public void disconnect(){
 		try {
-			connect.close();
+			this.connect.close();
 			System.out.println("Closed database successfully");
 		} catch (SQLException e) {
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -69,7 +72,7 @@ public class Sqlite {
 	}
 	
 	public boolean clearDatabase(){
-		File file = new File(dbName);
+		File file = new File(this.dbName);
 		
 		if(!file.exists())
 			return false;
