@@ -1,10 +1,10 @@
 package trivia;
 
 import java.util.Random;
-import java.util.Scanner;
 
 public class Maze
 {
+   private final char WALL = (char)178, PLAYER = 'P', DOOR = 'D', OPENDOOR = 'U', OPENSPACE = ' ', WINTILE = 'F';
    private Room[][] grid;
    private char[][] charGrid;
    private int curCol, curRow, winCol, winRow;
@@ -27,6 +27,11 @@ public class Maze
    {
       generateMaze(difficulty);
       createCharGrid();    
+   }
+   
+   public char[][] getCharGrid()
+   {
+	   return this.charGrid;
    }
    
    public boolean mazeIsSolvable()
@@ -221,7 +226,7 @@ public class Maze
 	  {
 		  for (int j = 0; j < printGrid.length; j++)
 		  {
-			  printGrid[i][j] = 'W';
+			  printGrid[i][j] = WALL;
 		  }
 	  }
       for (int i = 0; i < this.grid.length; i++)
@@ -230,43 +235,43 @@ public class Maze
          {
             if (this.grid[i][j].allLocked())
             {
-               printGrid[(i*2)+1][(j*2)+1] = 'W';
+               printGrid[(i*2)+1][(j*2)+1] = WALL;
             }
             else if (this.curCol == j && this.curRow == i)
             {
-               printGrid[(i*2)+1][(j*2)+1] = 'P';
+               printGrid[(i*2)+1][(j*2)+1] = PLAYER;
             }
             else if (this.winCol == j && this.curRow == i)
             {
-               printGrid[(i*2)+1][(j*2)+1] = 'F';
+               printGrid[(i*2)+1][(j*2)+1] = WINTILE;
             }
             else
             {
-               printGrid[(i*2)+1][(j*2)+1] = 'O';
+               printGrid[(i*2)+1][(j*2)+1] = OPENSPACE;
             }
             if (this.grid[i][j].getSouthDoor() == 2)
             {
-            	printGrid[(i*2)+2][(j*2)+1] = 'W';
+            	printGrid[(i*2)+2][(j*2)+1] = WALL;
             }
             else if (this.grid[i][j].getSouthDoor() == 0)
             {
-            	printGrid[(i*2)+2][(j*2)+1] = 'O';
+            	printGrid[(i*2)+2][(j*2)+1] = OPENSPACE;
             }
             else
             {
-            	printGrid[(i*2)+2][(j*2)+1] = 'D';
+            	printGrid[(i*2)+2][(j*2)+1] = DOOR;
             }
             if (this.grid[i][j].getEastDoor() == 2)
             {
-            	printGrid[(i*2)+1][(j*2)+2] = 'W';
+            	printGrid[(i*2)+1][(j*2)+2] = WALL;
             }
             else if (this.grid[i][j].getEastDoor() == 0)
             {
-            	printGrid[(i*2)+1][(j*2)+2] = 'O';
+            	printGrid[(i*2)+1][(j*2)+2] = OPENSPACE;
             }
             else
             {
-            	printGrid[(i*2)+1][(j*2)+2] = 'D';
+            	printGrid[(i*2)+1][(j*2)+2] = DOOR;
             }
          }
       }
@@ -284,126 +289,152 @@ public class Maze
          System.out.print("\n");
       }
    }
-   
-   public void playGame()
+   public boolean isADoor(int direction)
    {
-	   boolean youWon = false;
-	   int charCurRow, charCurCol;
-	   while (mazeIsSolvable())
+	   if (this.grid[curRow][curCol].checkDirection(direction) == 1)
 	   {
-		   charCurRow = (this.curRow * 2) + 1;
-		   charCurCol = (this.curCol * 2) + 1;
-		   if (curRow == winRow && curCol == winCol)
+		   return true;
+	   }
+	   return false;
+   }
+   
+   public void updateMaze(int direction, boolean correct)
+   {
+	   int charCurRow = (this.curRow * 2) + 1;
+	   int charCurCol = (this.curCol * 2) + 1;
+	   if (direction == 0)
+	   {
+		   if (charGrid[charCurRow+1][charCurCol] != WALL)
 		   {
-			   youWon = true;
-			   break;
-		   }
-		   printMaze();
-		   // user input through function
-		   int direction = 0;
-		   if (direction == 0)
-		   {
-			   if (charGrid[charCurRow+1][charCurCol] != 'W')
+			   if (charGrid[charCurRow+1][charCurCol] == DOOR)
 			   {
-				   if (charGrid[charCurRow+1][charCurCol] == 'D')
+				   if (correct)
 				   {
-					   if (correctAns())
-					   {
-						   charGrid[charCurRow+1][charCurCol] = 'U';
-						   this.grid[curRow][curCol].adjustLock(0,0);
-						   this.grid[curRow-1][curCol].adjustLock(2,0);
-						   this.curRow += + 1;
-					   }
-					   else
-					   {
-						   charGrid[charCurRow+1][charCurCol] = 'W';
-						   this.grid[curRow][curCol].adjustLock(0,2);
-						   this.grid[curRow-1][curCol].adjustLock(2,2);
-					   }
+					   charGrid[charCurRow+1][charCurCol] = OPENDOOR;
+					   this.grid[curRow][curCol].adjustLock(0,0);
+					   this.grid[curRow-1][curCol].adjustLock(2,0);
 				   }
 				   else
 				   {
-					   this.curRow += 1;
+					   charGrid[charCurRow+1][charCurCol] = WALL;
+					   this.grid[curRow][curCol].adjustLock(0,2);
+					   this.grid[curRow-1][curCol].adjustLock(2,2);
 				   }
 			   }
 		   }
-		   else if (direction == 1)
+	   }
+	   else if (direction == 1)
+	   {
+		   if (charGrid[charCurRow][charCurCol+1] != WALL)
 		   {
-			   if (charGrid[charCurRow][charCurCol+1] != 'W')
+			   if (charGrid[charCurRow][charCurCol+1] == DOOR)
 			   {
-				   if (charGrid[charCurRow][charCurCol+1] == 'D')
+				   if (correct)
 				   {
-					   if (correctAns())
-					   {
-						   charGrid[charCurRow][charCurCol+1] = 'U';
-						   this.grid[curRow][curCol].adjustLock(1,0);
-						   this.grid[curRow][curCol+1].adjustLock(3,0);
-						   this.curCol += 1;
-					   }
-					   else
-					   {
-						   charGrid[charCurRow][charCurCol+1] = 'W';
-						   this.grid[curRow][curCol].adjustLock(1,2);
-						   this.grid[curRow][curCol+1].adjustLock(3,2);
-					   }
+					   charGrid[charCurRow][charCurCol+1] = OPENDOOR;
+					   this.grid[curRow][curCol].adjustLock(1,0);
+					   this.grid[curRow][curCol+1].adjustLock(3,0);
 				   }
 				   else
 				   {
-					   this.curCol += 1;
+					   charGrid[charCurRow][charCurCol+1] = WALL;
+					   this.grid[curRow][curCol].adjustLock(1,2);
+					   this.grid[curRow][curCol+1].adjustLock(3,2);
 				   }
 			   }
 		   }
-		   else if (direction == 2)
+	   }
+	   else if (direction == 2)
+	   {
+		   if (charGrid[charCurRow-1][charCurCol] != WALL)
 		   {
-			   if (charGrid[charCurRow-1][charCurCol] != 'W')
+			   if (charGrid[charCurRow-1][charCurCol] == DOOR)
 			   {
-				   if (charGrid[charCurRow-1][charCurCol] == 'D')
+				   if (correct)
 				   {
-					   if (correctAns())
-					   {
-						   charGrid[charCurRow-1][charCurCol] = 'U';
-						   this.grid[curRow][curCol].adjustLock(2,0);
-						   this.grid[curRow-1][curCol].adjustLock(0,0);
-						   this.curRow -= 1;
-					   }
-					   else
-					   {
-						   charGrid[charCurRow-1][charCurCol] = 'W';
-						   this.grid[curRow][curCol].adjustLock(2,2);
-						   this.grid[curRow-1][curCol+1].adjustLock(0,2);
-					   }
+					   charGrid[charCurRow-1][charCurCol] = OPENDOOR;
+					   this.grid[curRow][curCol].adjustLock(2,0);
+					   this.grid[curRow-1][curCol].adjustLock(0,0);
 				   }
 				   else
 				   {
-					   this.curRow -= 1;
+					   charGrid[charCurRow-1][charCurCol] = WALL;
+					   this.grid[curRow][curCol].adjustLock(2,2);
+					   this.grid[curRow-1][curCol+1].adjustLock(0,2);
 				   }
 			   }
 		   }
-		   else if (direction == 3)
+	   }
+	   else if (direction == 3)
+	   {
+		   if (charGrid[charCurRow][charCurCol-1] != WALL)
 		   {
-			   if (charGrid[charCurRow][charCurCol-1] != 'W')
+			   if (charGrid[charCurRow][charCurCol-1] == DOOR)
 			   {
-				   if (charGrid[charCurRow][charCurCol-1] == 'D')
+				   if (correct)
 				   {
-					   if (correctAns())
-					   {
-						   charGrid[charCurRow][charCurCol-1] = 'U';
-						   this.grid[curRow][curCol].adjustLock(3,0);
-						   this.grid[curRow][curCol-1].adjustLock(1,0);
-						   this.curCol -= 1;
-					   }
-					   else
-					   {
-						   charGrid[charCurRow-1][charCurCol] = 'W';
-						   this.grid[curRow][curCol].adjustLock(3,2);
-						   this.grid[curRow-1][curCol+1].adjustLock(1,2);
-					   }
-				   }
-				   else
-				   {
+					   charGrid[charCurRow][charCurCol-1] = OPENDOOR;
+					   this.grid[curRow][curCol].adjustLock(3,0);
+					   this.grid[curRow][curCol-1].adjustLock(1,0);
 					   this.curCol -= 1;
 				   }
+				   else
+				   {
+					   charGrid[charCurRow-1][charCurCol] = WALL;
+					   this.grid[curRow][curCol].adjustLock(3,2);
+					   this.grid[curRow-1][curCol+1].adjustLock(1,2);
+				   }
 			   }
+		   }
+	   }
+   }
+   public boolean winningTile()
+   {
+	   if (this.curCol == this.winCol && this.curRow == this.winRow)
+	   {
+		   return true;
+	   }
+	   return false;
+   }
+   
+   public void movePlayer(int direction)
+   {
+	   int charCurRow = (this.curRow * 2) + 1;
+	   int charCurCol = (this.curCol * 2) + 1;
+	   if (direction == 0)
+	   {
+		   if (charGrid[charCurRow+1][charCurCol] != WALL && charGrid[charCurRow+1][charCurCol] != DOOR)
+		   {
+			   this.charGrid[charCurRow][charCurCol] = OPENSPACE;
+			   this.charGrid[charCurRow+2][charCurCol] = PLAYER;
+			   this.curRow += 1;
+		   }
+	   }
+	   else if (direction == 1)
+	   {
+		   if (charGrid[charCurRow][charCurCol+1] != WALL && charGrid[charCurRow][charCurCol+1] != DOOR)
+		   {
+			   this.charGrid[charCurRow][charCurCol] = OPENSPACE;
+			   this.charGrid[charCurRow][charCurCol+2] = PLAYER;
+			   this.curCol += 1;
+		   }
+	   }
+	   else if (direction == 2)
+	   {
+		   if (charGrid[charCurRow-1][charCurCol] != WALL && charGrid[charCurRow-1][charCurCol] != DOOR)
+		   {
+			   this.charGrid[charCurRow][charCurCol] = OPENSPACE;
+			   this.charGrid[charCurRow-2][charCurCol] = PLAYER;
+			   this.curRow -= 1;
+		   }
+	   }
+	   else if (direction == 3)
+	   {
+		   if (charGrid[charCurRow][charCurCol-1] != WALL && charGrid[charCurRow][charCurCol-1] != DOOR)
+		   {
+			   this.charGrid[charCurRow][charCurCol] = OPENSPACE;
+			   this.charGrid[charCurRow][charCurCol-2] = PLAYER;
+			   this.curCol -= 1;
 		   }
 	   }
    }

@@ -58,5 +58,23 @@ public class MazeTest {
 		assertEquals(true,r1.isPassable(1));
 		assertEquals(false,r1.isPassable(2));
 	}
+	@Test
+	public void testAllLocked()
+	{
+		Room r1 = new Room(2,2,2,2);
+		Room r2 = new Room(2,2,0,2);
+		assertEquals(true,r1.allLocked());
+		assertEquals(false,r2.allLocked());
+	}
+	@Test
+	public void testAdjustLock()
+	{
+		Room r1 = new Room(2,2,2,2);
+		r1.adjustLock(0,1);
+		assertEquals(0,r1.getNorthDoor());
+		assertEquals(r1.getEastDoor(), 2);
+		assertEquals(r1.getSouthDoor(),2);
+		assertEquals(r1.getWestDoor(),2);
+	}
 
 }

@@ -2,7 +2,8 @@ package trivia;
 
 public class Room
 {
-   private static final int UNLOCKED = 0, NORTH = 0, LOCKED = 1, EAST = 1, TRUELOCK = 2, SOUTH = 2, WEST = 3;
+   public static final int NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3;
+   private final int UNLOCKED = 0, LOCKED = 1, TRUELOCK = 2;
    private int northDoor;
    private int southDoor;
    private int westDoor;
