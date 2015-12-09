@@ -502,10 +502,10 @@ public class Maze implements Serializable
 	   int charCurCol = (this.curCol * 2) + 1;
 	   if (direction == 0)
 	   {
-		   if (charGrid[charCurRow+1][charCurCol] != WALL && charGrid[charCurRow+1][charCurCol] != DOOR)
+		   if (charGrid[charCurRow-1][charCurCol] != WALL && charGrid[charCurRow-1][charCurCol] != DOOR)
 		   {
 			   this.charGrid[charCurRow][charCurCol] = OPENSPACE;
-			   this.charGrid[charCurRow+2][charCurCol] = PLAYER;
+			   this.charGrid[charCurRow-2][charCurCol] = PLAYER;
 			   this.curRow -= 1;
 		   }
 	   }
@@ -520,10 +520,10 @@ public class Maze implements Serializable
 	   }
 	   else if (direction == 2)
 	   {
-		   if (charGrid[charCurRow-1][charCurCol] != WALL && charGrid[charCurRow-1][charCurCol] != DOOR)
+		   if (charGrid[charCurRow+1][charCurCol] != WALL && charGrid[charCurRow+1][charCurCol] != DOOR)
 		   {
 			   this.charGrid[charCurRow][charCurCol] = OPENSPACE;
-			   this.charGrid[charCurRow-2][charCurCol] = PLAYER;
+			   this.charGrid[charCurRow+2][charCurCol] = PLAYER;
 			   this.curRow += 1;
 		   }
 	   }
