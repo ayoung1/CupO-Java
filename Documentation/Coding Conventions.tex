@@ -1,0 +1,39 @@
+\documentclass[12pt]{article}
+\usepackage{fancyhdr}
+\setlength{\headheight}{15.2pt}
+\pagestyle{fancy}
+\fancyhead[l]{Coding Standards}
+\fancyhead[c]{Cup of Java}
+\fancyhead[r]{CSCD 350}
+\fancyfoot[l]{by Bryce Fenske}
+\begin{document}
+\noindent
+\thispagestyle{empty}
+\LARGE Title Page: Coding Conventions in a better font than this
+\pagebreak
+
+%\noindent
+\normalsize
+\textbf{Coding Conventions:}
+Consistent headers and header info (template, forthcoming)
+Descriptive method and class names, single responsibility principle in effect.\\
+
+\textbf{Spacing:}
+Brace \{\} pairs placed on line below class/method, same indentation. Code will be left justified with each sub sections indentation increased by one tab (the main class and any dependencies will be flush, the main block will be tabbed once, etc). Space between operators and operands: a + b. No unnecessary carriage returns in body of code.\\
+
+\textbf{Naming Conventions:}
+Camel case, classes capitalized, constants in upper case spaced by underscores: THIS\_IS\_A\_CONST. Class names and methods should be descriptive s.t. a programmer familiar with the syntax of the language would not need comments to understand the code.\\
+
+\textbf{Declaration:}
+Constants at start of class, followed by static variables. Local variables at start of method/block. Group variable declaration by types.\\
+
+\textbf{Conditional Statements:} For any conditional statements greater than two that evaluate to one value, put parentheses around all statements. let $\gamma$ be a logical operator and $C_i$ be the $ith$ condition, then format: $((C_1)\ \gamma \ (C_2)\ \gamma\ ...\ \gamma\ (C_n))$ with new lines as needed for aesthetic and readability.\\
+
+\textbf{Comments:} Comments outside of headers will be on the line previous a code block and should be minimal. Use one line comment conventions (except in headers, which will be a language specific template). Any comments will hold to a professional standard of English.\\
+
+\textbf{C\# Specific:} Multidimensional arrays will be initialized as $arrayName [,]$\\
+
+%gets and sets inline
+
+
+\end{document}
