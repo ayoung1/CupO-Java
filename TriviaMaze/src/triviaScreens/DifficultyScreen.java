@@ -30,7 +30,7 @@ public class DifficultyScreen implements Screen{
 		}else
 		{
 			terminal.clear();
-			terminal.write("Controls here", 1, 1);
+			terminal.write("wasd to navigate", 1, 1);
 		}
 	}
 

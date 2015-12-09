@@ -29,15 +29,29 @@ public class QuestionScreen implements Screen {
 	@Override
 	public void displayOutput(AsciiPanel terminal) {
 		// TODO Auto-generated method stub
-		String buff = "";
+		int lineLen = 58;
+		String buff = question.getQuestion().substring(0, lineLen);
 		int i = 0;
-		int lineLen = 59;
-		while(buff.length() != 0)
+		
+		String q = question.getQuestion();
+		if(q.length() < lineLen)
+			terminal.write(q);
+		else
 		{
-			buff = question.getQuestion().substring(lineLen * i, lineLen * (i + 1));
-			terminal.write(buff, 1, i + 1);
+			while(buff.length() != 0)
+			{
+				if(lineLen * (i + 1) > q.length())
+					buff = q.substring(i * lineLen);
+				else
+					buff = q.substring(lineLen * i, lineLen * (i + 1));
+				terminal.write(buff, 1, i + 1);
+				if(buff.length() < lineLen)
+				{
+					buff = "";
+				}
+				i++;
+			}
 		}
-		terminal.write("Questions here", 1, 1);
 	}
 
 	@Override
