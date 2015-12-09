@@ -68,7 +68,9 @@ public class Maze implements Serializable
    public boolean cheatPath()
    {
 	   Room[][] gridClone = copyGrid();
-	   return traverseMaze(gridClone, this.curCol, this.curRow, -1, true);
+	   boolean solvable = traverseMaze(gridClone, this.curCol, this.curRow, -1, true);
+	   this.charGrid[(this.curRow*2)+1][(this.curCol*2)+1] = PLAYER;
+	   return solvable;
    }
    
    public boolean mazeIsSolvable()
@@ -86,6 +88,7 @@ public class Maze implements Serializable
          {
         	if (cheating)
         	{
+            cheatCharGrid((col*2)+1, (row*2)+1, direction);
         		this.grid[row][col].adjustLock(direction, 0);
         	}
             return true;
@@ -106,7 +109,6 @@ public class Maze implements Serializable
             pathFound = traverseMaze(gridClone, col, row+1, 0, cheating);
             if (cheating && pathFound)
             {
-            	cheatCharGrid(col, row, direction);
             	this.grid[row][col].adjustLock(2,0);
             }
          }
@@ -116,7 +118,6 @@ public class Maze implements Serializable
             pathFound = traverseMaze(gridClone, col-1, row, 1, cheating);
             if (cheating && pathFound)
             {
-            	cheatCharGrid(col, row, direction);
             	this.grid[row][col].adjustLock(3,0);
             }
          }
@@ -126,10 +127,14 @@ public class Maze implements Serializable
             pathFound = traverseMaze(gridClone, col, row-1, 2, cheating);
             if (cheating && pathFound)
             {
-            	cheatCharGrid(col, row, direction);
             	this.grid[row][col].adjustLock(0,0);
             }
          }
+      }
+      if (cheating && pathFound)
+      {
+         this.charGrid[(row*2)+1][(col*2)+1] = WINPATH;
+         cheatCharGrid((col*2)+1, (row*2)+1, direction);
       }
       return pathFound;
    }
@@ -199,19 +204,19 @@ public class Maze implements Serializable
    {
 	   if (direction == 0)
 	   {
-		   this.charGrid[row+1][col] = WINPATH;
+		   this.charGrid[row-1][col] = WINPATH;
 	   }
 	   else if (direction == 1)
 	   {
-		   this.charGrid[row][col-1] = WINPATH;
+		   this.charGrid[row][col+1] = WINPATH;
 	   }
 	   else if (direction == 2)
 	   {
-		   this.charGrid[row-1][col] = WINPATH;
+		   this.charGrid[row+1][col] = WINPATH;
 	   }
 	   else if (direction == 3)
 	   {
-		   this.charGrid[row][col+1] = WINPATH;
+		   this.charGrid[row][col-1] = WINPATH;
 	   }
    }
    
