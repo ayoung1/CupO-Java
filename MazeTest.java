@@ -1,4 +1,4 @@
-package trivia;
+package maze;
 
 import static org.junit.Assert.*;
 

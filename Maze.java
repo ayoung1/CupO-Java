@@ -1,4 +1,9 @@
-package trivia;
+/*
+ * Name: Trae Rawls
+ * Desc: The maze class handles the traversal and alteration of the grid for the game.
+ */
+
+package maze;
 
 import java.util.Random;
 import java.io.*;
@@ -192,14 +197,24 @@ public class Maze implements Serializable
          }
       }
       recursiveBacktracker(newGrid,visited,0,0,-1);
-      Random rng = new Random();
-      this.curCol = rng.nextInt(newGrid.length);
-      this.curRow = rng.nextInt(newGrid.length);
-      this.winCol = rng.nextInt(newGrid.length);
-      this.winRow = rng.nextInt(newGrid.length);
+      this.curCol = acceptableNum(newGrid.length);
+      this.curRow = acceptableNum(newGrid.length);
+      this.winCol = acceptableNum(newGrid.length);
+      this.winRow = acceptableNum(newGrid.length);
       this.grid = newGrid;
    }
    
+   private int acceptableNum(int num)
+   {
+        Random rng = new Random();
+        int retNum = rng.nextInt(num);
+        while (retNum == 0 || retNum == num)
+        {
+            rng.nextInt(num);
+        }
+        return retNum;
+   }
+      
    private void cheatCharGrid(int col, int row, int direction)
    {
 	   if (direction == 0)
@@ -318,7 +333,7 @@ public class Maze implements Serializable
       {
          for (int j = 0; j < this.grid[i].length; j++)
          {
-            if (this.grid[i][j].allLocked())
+            if ((this.grid[i][j].allLocked()) && (!(i == this.winRow && j == this.winCol)))
             {
                printGrid[(i*2)+1][(j*2)+1] = WALL;
             }
@@ -326,7 +341,7 @@ public class Maze implements Serializable
             {
                printGrid[(i*2)+1][(j*2)+1] = PLAYER;
             }
-            else if (this.winCol == j && this.curRow == i)
+            else if (this.winCol == j && this.winRow == i)
             {
                printGrid[(i*2)+1][(j*2)+1] = WINTILE;
             }
@@ -389,19 +404,19 @@ public class Maze implements Serializable
 	   int charCurCol = (this.curCol * 2) + 1;
 	   if (direction == 0)
 	   {
-		   if (charGrid[charCurRow+1][charCurCol] != WALL)
+		   if (charGrid[charCurRow-1][charCurCol] != WALL)
 		   {
-			   if (charGrid[charCurRow+1][charCurCol] == DOOR)
+			   if (charGrid[charCurRow-1][charCurCol] == DOOR)
 			   {
 				   if (correct)
 				   {
-					   charGrid[charCurRow+1][charCurCol] = OPENDOOR;
+					   this.charGrid[charCurRow-1][charCurCol] = OPENDOOR;
 					   this.grid[curRow][curCol].adjustLock(0,0);
 					   this.grid[curRow-1][curCol].adjustLock(2,0);
 				   }
 				   else
 				   {
-					   charGrid[charCurRow+1][charCurCol] = WALL;
+					   this.charGrid[charCurRow-1][charCurCol] = WALL;
 					   this.grid[curRow][curCol].adjustLock(0,2);
 					   this.grid[curRow-1][curCol].adjustLock(2,2);
 				   }
@@ -431,21 +446,21 @@ public class Maze implements Serializable
 	   }
 	   else if (direction == 2)
 	   {
-		   if (charGrid[charCurRow-1][charCurCol] != WALL)
+		   if (charGrid[charCurRow+1][charCurCol] != WALL)
 		   {
-			   if (charGrid[charCurRow-1][charCurCol] == DOOR)
+			   if (charGrid[charCurRow+1][charCurCol] == DOOR)
 			   {
 				   if (correct)
 				   {
-					   charGrid[charCurRow-1][charCurCol] = OPENDOOR;
+					   charGrid[charCurRow+1][charCurCol] = OPENDOOR;
 					   this.grid[curRow][curCol].adjustLock(2,0);
-					   this.grid[curRow-1][curCol].adjustLock(0,0);
+					   this.grid[curRow+1][curCol].adjustLock(0,0);
 				   }
 				   else
 				   {
-					   charGrid[charCurRow-1][charCurCol] = WALL;
+					   charGrid[charCurRow+1][charCurCol] = WALL;
 					   this.grid[curRow][curCol].adjustLock(2,2);
-					   this.grid[curRow-1][curCol+1].adjustLock(0,2);
+					   this.grid[curRow+1][curCol].adjustLock(0,2);
 				   }
 			   }
 		   }
@@ -461,13 +476,12 @@ public class Maze implements Serializable
 					   charGrid[charCurRow][charCurCol-1] = OPENDOOR;
 					   this.grid[curRow][curCol].adjustLock(3,0);
 					   this.grid[curRow][curCol-1].adjustLock(1,0);
-					   this.curCol -= 1;
 				   }
 				   else
 				   {
-					   charGrid[charCurRow-1][charCurCol] = WALL;
+					   charGrid[charCurRow][charCurCol-1] = WALL;
 					   this.grid[curRow][curCol].adjustLock(3,2);
-					   this.grid[curRow-1][curCol+1].adjustLock(1,2);
+					   this.grid[curRow][curCol-1].adjustLock(1,2);
 				   }
 			   }
 		   }
@@ -492,7 +506,7 @@ public class Maze implements Serializable
 		   {
 			   this.charGrid[charCurRow][charCurCol] = OPENSPACE;
 			   this.charGrid[charCurRow+2][charCurCol] = PLAYER;
-			   this.curRow += 1;
+			   this.curRow -= 1;
 		   }
 	   }
 	   else if (direction == 1)
@@ -510,7 +524,7 @@ public class Maze implements Serializable
 		   {
 			   this.charGrid[charCurRow][charCurCol] = OPENSPACE;
 			   this.charGrid[charCurRow-2][charCurCol] = PLAYER;
-			   this.curRow -= 1;
+			   this.curRow += 1;
 		   }
 	   }
 	   else if (direction == 3)

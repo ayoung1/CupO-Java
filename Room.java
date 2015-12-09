@@ -1,4 +1,10 @@
-package trivia;
+/*
+ * Name: Trae Rawls
+ * Desc: The Room class is used to represent doors in each area of the grid. Door adjustments are
+ * 		 also handled by this class.
+ */
+
+package maze;
 
 import java.io.*;
 
