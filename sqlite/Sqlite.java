@@ -17,7 +17,6 @@ public class Sqlite {
 	
 	private static final int TF_LENGTH = 2;
 	private static final int SA_LENGTH = 2;
-	private static final int MC_MIN = 3;
 	private static final int MC_MAX = 6;
 	
 	private final String truefalse = "true_false";
@@ -174,7 +173,7 @@ public class Sqlite {
 				System.exit(0);
 			}
 		}else if(tag == Sqlite.MULTIPLE_CHOICE){
-			if(args.length >= MC_MIN && args.length <= MC_MAX){
+			if(args.length == MC_MAX){
 				insertMultipleChoice(args);
 				return true;
 			}else{
@@ -220,9 +219,9 @@ public class Sqlite {
 	private void insertMultipleChoice(String[] args){
 		int options = args.length - 2;
 		String sql = "INSERT INTO "+ multiplechoice +"(question_num, num_options, question, answer, option_1, option_2, option_3, option_4)"+
-				"VALUES(" + this.autoIncrement++ + options + ",'" + args[0] + "', '" + args[1] + ",'" + args[2] + "', '" + args[3] + "', '" + args[4] + "', '" + args[5] + "')";
+				"VALUES(" + this.autoIncrement++ + ", " + options + ", '" + args[0] + "', '" + args[1] + "', '" + args[2] + "', '" + args[3] + "', '" + args[4] + "', '" + args[5] + "')";
 		Statement stmt = null;
-		
+
 		try {
 			stmt = connect.createStatement();
 			stmt.executeUpdate(sql);
@@ -234,7 +233,6 @@ public class Sqlite {
 	
 	public int countArchive(){
 		int count = 0;
-		int index = 0;
 		String[] tables = {truefalse, shortanswer, multiplechoice};
 		String sql;
 		Statement stmt;
@@ -256,7 +254,6 @@ public class Sqlite {
 				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 			    System.exit(0);
 			}
-			index++;
 		}
 		
 		return count;
@@ -281,8 +278,6 @@ public class Sqlite {
 		Statement stmt;
 		ResultSet set;
 		Question question;
-		int index = Sqlite.TRUE_FALSE;
-		
 		sql = "SELECT * FROM " + truefalse;
 		sql = addException(sql);
 		try{
@@ -304,8 +299,6 @@ public class Sqlite {
 		Statement stmt;
 		ResultSet set;
 		Question question;
-		int index = Sqlite.SHORT_ANSWER;
-		
 		sql = "SELECT * FROM " + shortanswer;
 		sql = addException(sql);
 		try{
@@ -327,8 +320,6 @@ public class Sqlite {
 		Statement stmt;
 		ResultSet set;
 		Question question;
-		int index = Sqlite.MULTIPLE_CHOICE;
-		
 		sql = "SELECT * FROM " + multiplechoice;
 		sql = addException(sql);
 		try{

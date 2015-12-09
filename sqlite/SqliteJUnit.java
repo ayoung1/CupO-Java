@@ -16,6 +16,8 @@ public class SqliteJUnit {
 	final int pull = 1;
 	String dbname = "test.db";
 	String[] args = {"Is this a question?", "T"};
+	String[] shortArgs = {"Its a short answer?", "Yes it is"};
+	String[] multArgs = {"This is a multiple choice question?", "Yes", "No", "Maybe", "", ""};
 	Sqlite slite;
 	
 	@Before
@@ -67,6 +69,20 @@ public class SqliteJUnit {
 		
 		assertEquals("Question not creating args correctly : ", test.getArgs(), question.getArgs());
 		assertEquals("Question not comparing answers correctly : ", true, question.isAnswerCorrect(question.getAnswer()));
+	
+		slite.add(Sqlite.MULTIPLE_CHOICE, this.multArgs);
+		slite.add(Sqlite.SHORT_ANSWER, this.shortArgs);
+		slite.setExclusions(blank);
+		
+		list = slite.queryAll(0);
+		question = list.get(6);
+		test = list.get(5);
+		
+		//for(Question q : list)
+		//	System.out.println(q.getId() + "->" + q.getQuestionType());
+		
+		assertEquals("Multiple not executeing correctly : ", Question.QuestionType.MultipleChoice, question.getQuestionType());
+		assertEquals("Short Answer not executing correctly : ", Question.QuestionType.ShortAnswer, test.getQuestionType());
 	}
 
 }
