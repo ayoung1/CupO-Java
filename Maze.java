@@ -14,7 +14,7 @@ public class Maze implements Serializable
 		   OPENSPACE = ' ', WINTILE = 'F', WINPATH = '#';
    private Room[][] grid;
    private char[][] charGrid;
-   private int curCol, curRow, winCol, winRow;
+   private int curCol, curRow, winCol, winRow, numOfDoors;
    
    public Maze(Room[][] grid, int curCol, int curRow, int winCol, int winRow)
    {
@@ -27,6 +27,7 @@ public class Maze implements Serializable
       this.curRow = curRow;
       this.winCol = winCol;
       this.winRow = winRow;
+      this.numOfDoors = 0;
       createCharGrid();
    }
    
@@ -45,9 +46,15 @@ public class Maze implements Serializable
    {
 	   return this.grid;
    }
+   
    public char[][] getCharGrid()
    {
 	   return this.charGrid;
+   }
+   
+   public int getNumOfDoors()
+   {
+	   return this.numOfDoors;
    }
    
    public int getCurRow()
@@ -205,6 +212,7 @@ public class Maze implements Serializable
       this.curRow = acceptableNum(newGrid.length);
       this.winCol = acceptableNum(newGrid.length);
       this.winRow = acceptableNum(newGrid.length);
+      this.numOfDoors = 0;
       this.grid = newGrid;
    }
    
@@ -364,6 +372,7 @@ public class Maze implements Serializable
             else
             {
             	printGrid[(i*2)+2][(j*2)+1] = DOOR;
+            	this.numOfDoors++;
             }
             if (this.grid[i][j].getEastDoor() == 2)
             {
@@ -376,6 +385,7 @@ public class Maze implements Serializable
             else
             {
             	printGrid[(i*2)+1][(j*2)+2] = DOOR;
+            	this.numOfDoors++;
             }
          }
       }
