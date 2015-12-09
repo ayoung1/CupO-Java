@@ -27,7 +27,8 @@ public class MazeTest {
 	}
 
 	@Test
-	public void testSolvable() {
+	public void testSolvable()
+	{
 		Room[][] testGrid = {{new Room(2,2,1,2),new Room(2,2,2,2),new Room(2,1,1,2),new Room(2,2,2,1)},
                 {new Room(1,1,1,2),new Room(2,1,2,1),new Room(1,2,2,1),new Room(2,2,2,2)},
                 {new Room(1,2,1,2),new Room(2,2,2,2),new Room(2,2,2,2),new Room(2,2,2,2)},
@@ -40,6 +41,18 @@ public class MazeTest {
 		Maze m2 = new Maze(testGridUnsolvable,0,0,3,0);
 		assertEquals(true, m1.mazeIsSolvable());
 		assertEquals(false, m2.mazeIsSolvable());
+	}
+	@Test
+	public void testWinningTile()
+	{
+		Room[][] testGrid = {{new Room(2,2,1,2),new Room(2,2,2,2),new Room(2,1,1,2),new Room(2,2,2,1)},
+                {new Room(1,1,1,2),new Room(2,1,2,1),new Room(1,2,2,1),new Room(2,2,2,2)},
+                {new Room(1,2,1,2),new Room(2,2,2,2),new Room(2,2,2,2),new Room(2,2,2,2)},
+                {new Room(1,1,2,2),new Room(2,1,2,1),new Room(2,2,2,2),new Room(2,2,2,2)}};
+		Maze m1 = new Maze(testGrid,1,1,1,2);
+		Maze m2 = new Maze(testGrid,1,2,1,2);
+		assertEquals(false,m1.winningTile());
+		assertEquals(true,m2.winningTile());
 	}
 	@Test
 	public void testRoomGets()
@@ -71,10 +84,9 @@ public class MazeTest {
 	{
 		Room r1 = new Room(2,2,2,2);
 		r1.adjustLock(0,1);
-		assertEquals(0,r1.getNorthDoor());
+		assertEquals(1,r1.getNorthDoor());
 		assertEquals(r1.getEastDoor(), 2);
 		assertEquals(r1.getSouthDoor(),2);
 		assertEquals(r1.getWestDoor(),2);
 	}
-
 }

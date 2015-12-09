@@ -1,10 +1,12 @@
 package trivia;
 
 import java.util.Random;
+import java.io.*;
 
-public class Maze
+public class Maze implements Serializable
 {
-   private final char WALL = (char)178, PLAYER = 'P', DOOR = 'D', OPENDOOR = 'U', OPENSPACE = ' ', WINTILE = 'F';
+   private final char WALL = (char)178, PLAYER = 'P', DOOR = 'D', OPENDOOR = 'U',
+		   OPENSPACE = ' ', WINTILE = 'F', WINPATH = '#';
    private Room[][] grid;
    private char[][] charGrid;
    private int curCol, curRow, winCol, winRow;
@@ -29,24 +31,63 @@ public class Maze
       createCharGrid();    
    }
    
+   public Maze(ObjectInputStream in) throws IOException, ClassNotFoundException
+   {
+	   readObject(in);
+   }
+   
+   public Room[][] getGrid()
+   {
+	   return this.grid;
+   }
    public char[][] getCharGrid()
    {
 	   return this.charGrid;
    }
    
+   public int getCurRow()
+   {
+	   return this.curRow;
+   }
+   
+   public int getCurCol()
+   {
+	   return this.curCol;
+   }
+   
+   public int getWinRow()
+   {
+	   return this.winRow;
+   }
+   
+   public int getWinCol()
+   {
+	   return this.winCol;
+   }
+   
+   public boolean cheatPath()
+   {
+	   Room[][] gridClone = copyGrid();
+	   return traverseMaze(gridClone, this.curCol, this.curRow, -1, true);
+   }
+   
    public boolean mazeIsSolvable()
    {
       Room[][] gridClone = copyGrid();
-      return traverseMaze(gridClone, this.curCol, this.curRow, -1);
+      return traverseMaze(gridClone, this.curCol, this.curRow, -1, false);
    }
    
-   private boolean traverseMaze(Room[][] gridClone, int col, int row, int direction)
+   private boolean traverseMaze(Room[][] gridClone, int col, int row, int direction, boolean cheating)
    {
       boolean pathFound = false;
       if (validDoor(gridClone,col,row,direction))
       {
          if (col == this.winCol && row == this.winRow)
          {
+        	if (cheating)
+        	{
+        		this.grid[row][col].adjustLock(direction, 0);
+        	}
             return true;
          }
          if (direction != -1)
@@ -54,21 +95,40 @@ public class Maze
             gridClone[row][col].adjustLock(direction, 4);
          }
          gridClone[row][col].adjustLock(1,4);
-         pathFound = traverseMaze(gridClone,col+1, row, 3);
+         pathFound = traverseMaze(gridClone, col+1, row, 3, cheating);
+         if (cheating && pathFound)
+         {
+        	 this.grid[row][col].adjustLock(1,0);
+         }
          if (!pathFound)
          {
             gridClone[row][col].adjustLock(2,4);
-            pathFound = traverseMaze(gridClone,col, row+1, 0);
+            pathFound = traverseMaze(gridClone, col, row+1, 0, cheating);
+            if (cheating && pathFound)
+            {
+            	cheatCharGrid(col, row, direction);
+            	this.grid[row][col].adjustLock(2,0);
+            }
          }
          if (!pathFound)
          {
             gridClone[row][col].adjustLock(3,4);
-            pathFound = traverseMaze(gridClone,col-1,row, 1);
+            pathFound = traverseMaze(gridClone, col-1, row, 1, cheating);
+            if (cheating && pathFound)
+            {
+            	cheatCharGrid(col, row, direction);
+            	this.grid[row][col].adjustLock(3,0);
+            }
          }
          if (!pathFound)
          {
             gridClone[row][col].adjustLock(0,4);
-            pathFound = traverseMaze(gridClone,col,row-1, 2);
+            pathFound = traverseMaze(gridClone, col, row-1, 2, cheating);
+            if (cheating && pathFound)
+            {
+            	cheatCharGrid(col, row, direction);
+            	this.grid[row][col].adjustLock(0,0);
+            }
          }
       }
       return pathFound;
@@ -107,11 +167,11 @@ public class Maze
       boolean[][] visited;
       if (difficulty.toLowerCase().equals("regular"))
       {
-         newGrid = new Room[14][14];
+         newGrid = new Room[9][9];
       }
       else if (difficulty.toLowerCase().equals("hard"))
       {
-         newGrid = new Room[20][20];
+         newGrid = new Room[11][11];
       }
       else
       {
@@ -133,6 +193,26 @@ public class Maze
       this.winCol = rng.nextInt(newGrid.length);
       this.winRow = rng.nextInt(newGrid.length);
       this.grid = newGrid;
+   }
+   
+   private void cheatCharGrid(int col, int row, int direction)
+   {
+	   if (direction == 0)
+	   {
+		   this.charGrid[row-1][col] = WINPATH;
+	   }
+	   else if (direction == 1)
+	   {
+		   this.charGrid[row][col+1] = WINPATH;
+	   }
+	   else if (direction == 2)
+	   {
+		   this.charGrid[row+1][col] = WINPATH;
+	   }
+	   else if (direction == 3)
+	   {
+		   this.charGrid[row][col-1] = WINPATH;
+	   }
    }
    
    private void recursiveBacktracker(Room[][] grid, boolean[][] visited, int col, int row, int prevDoor)
@@ -437,5 +517,44 @@ public class Maze
 			   this.curCol -= 1;
 		   }
 	   }
+   }
+   
+   private void writeObject(ObjectOutputStream out) throws IOException
+   {
+	   try
+	   {
+		   Maze outObject = new Maze(this.grid,this.curCol,this.curRow,this.winCol,this.winRow);
+		   out.writeObject(outObject);  
+	   }
+	   catch (IOException e)
+	   {
+		   e.printStackTrace();
+	   }
+   }
+   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
+   {
+	   try
+	   {
+		   Maze inObject = (Maze)in.readObject();
+		   this.grid = inObject.getGrid();
+		   this.grid = copyGrid();
+		   this.charGrid = inObject.getCharGrid();
+		   this.curRow = inObject.getCurRow();
+		   this.curCol = inObject.getCurCol();
+		   this.winRow = inObject.getWinRow();
+		   this.winCol = inObject.getWinCol();
+	   }
+	   catch (IOException e)
+	   {
+		   e.printStackTrace();
+	   }
+	   catch (ClassNotFoundException e)
+	   {
+		   e.printStackTrace();
+	   }
+   }
+   private void readObjectNoData() throws ObjectStreamException
+   {
+	   
    }
 }
