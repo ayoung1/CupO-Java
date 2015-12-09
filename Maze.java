@@ -107,6 +107,7 @@ public class Maze implements Serializable
          if (cheating && pathFound)
          {
         	 this.grid[row][col].adjustLock(1,0);
+        	 this.grid[row][col+1].adjustLock(3,0);
          }
          if (!pathFound)
          {
@@ -115,6 +116,7 @@ public class Maze implements Serializable
             if (cheating && pathFound)
             {
             	this.grid[row][col].adjustLock(2,0);
+            	this.grid[row+1][col].adjustLock(0,0);
             }
          }
          if (!pathFound)
@@ -124,6 +126,7 @@ public class Maze implements Serializable
             if (cheating && pathFound)
             {
             	this.grid[row][col].adjustLock(3,0);
+            	this.grid[row][col-1].adjustLock(1,0);
             }
          }
          if (!pathFound)
@@ -133,6 +136,7 @@ public class Maze implements Serializable
             if (cheating && pathFound)
             {
             	this.grid[row][col].adjustLock(0,0);
+            	this.grid[row-1][col].adjustLock(2,0);
             }
          }
       }
