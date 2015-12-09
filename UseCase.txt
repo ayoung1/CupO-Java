@@ -1,0 +1,8 @@
+Name: Play the Game
+Description: Traverse the selected maze and attempt to reach the winning tile.
+Primary Actor: User
+Main Scenario:  1. Start the game
+		2. Choose a difficulty
+		3. Traverse the maze
+		4. Answer questions as they appear
+		5. Either reach the end or lose your path
