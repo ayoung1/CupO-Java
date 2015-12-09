@@ -1,0 +1,208 @@
+<!doctype html>
+
+<html class="no-js" lang="en">
+
+	<head>
+
+		<meta charset="utf-8" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>Trivia Maze</title>
+
+		<link rel="stylesheet" href="css/foundation.css" />
+
+		<link rel="stylesheet" href="css/UnitTest/QUnit.css" />
+
+		<link rel="stylesheet" href="css/styles.css" />
+
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+		<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
+		<script src="js/vendor/modernizr.js"></script>
+
+		<script src="js/MyScripts.js"></script>
+
+	</head>
+
+  <body>
+
+    
+
+	<div id="unittest" class="hide">
+
+		<div id="qunit"></div>
+
+		<div id="qunit-fixture"></div>
+
+		<script src="js/UnitTest/QUnit.js"></script>
+
+		<script src="js/MyUnitTest.js"></script>
+
+	</div>
+
+	
+
+	<div class="wrapper">
+
+		<div class="row">
+
+			<div class="small-12 columns vertical-space">
+
+				<h1 class="medium-8 large-6 medium-offset-3">Trivia Maze Repository</h1>
+
+			</div>
+
+		</div>
+
+		<div id='questionpage' class="row">
+
+			<div id="formbox" class="medium-12 columns">
+
+				<div class="medium-6 medium-offset-3 columns">
+
+					<p class="vertical-space">Question:</p>
+
+					<input id="question" type="text" maxlength=255/>
+
+					<div id="buttoncollection" class="medium-offset-1">
+
+						<input id='radio1' type="radio" name="type" value="truefalse"/><label for='radio1'>True/False</label>
+
+						<input id='radio2' type="radio" name="type" value="oneword"/><label for='radio2'>Short Answer</label>
+
+						<input id='radio3' type="radio" name="type" value="multiplechoice"/><label for='radio3'>Multiple Choice</label>
+
+						<a id="help" class="tiny">?</a>
+
+					</div>
+
+					<div id="answerform" class="vertical-space">
+
+						<form id="truefalse" class="hide">
+
+							<div class='medium-offset-3'>
+
+								<input class='medium-offset-1' id='trueradio' type="radio" name="truefalse" data-id="true"/><label for='trueradio'>True</label>
+
+								<input class='medium-offset-3' id='falseradio' type="radio" name="truefalse" data-id="false"/><label for='falseradio'>False</label>
+
+							</div>
+
+							<span class="medium-offset-5"><input type="button" name="submit" value="Submit!" data-id="truefalse" class="button small radius vertical-space"/></span>
+
+						</form>
+
+						<form id="oneword" class="hide">
+
+							<p>Answer:</p>
+
+							<span><input id="wordanswer" type="text" maxlength=50/></span>
+
+							<span class="medium-offset-5"><input type="button" name="submit" value="Submit!" data-id="oneword" class="button small radius vertical-space"/></span>
+
+						</form>
+
+						<form id="multiplechoice" class="hide">
+
+							<p>Answer: <span class='medium-1'><a id="multihelp" class="tiny">?</a></span></p>
+
+							<input id='multianswer' type='text' maxlength=50/>
+
+							<p>Options:</p>
+
+							<div id="multipletable"></div>		
+
+							<div class="medium-offset-1">
+
+								<input type="button" id="addbutton" value="Add" class="button tiny radius"/> 
+
+								<input type="button" id="removebutton" value="Remove" class="button tiny radius"/> 
+
+							</div>
+
+							<span class="medium-offset-5"><input type="button" name="submit" value="Submit!" data-id="multiplechoice" class="button small radius vertical-space"/></span>
+
+						</form>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+		<div id='loginpage' class="row hide">
+
+			<form class='medium-offset-4'>
+
+				<p class='vertical-space'>Username</p>
+
+				<div class='medium-5'><input id='username' type='text' maxlength=50/></div>
+
+				<p class='vertical-space'>Password</p>
+
+				<div class='medium-5'><input id='password' type='password' maxlength=50/></div>
+
+				<input type='button' id='logsubmit' class='vertical-space radius button small' name='login' value='Login'/>
+
+			</form>
+
+		</div>
+
+		<div id="errormsg" class="hide medium-offset-3"></div>
+
+		<div class="push"></div>
+
+	</div>
+
+    <footer class="footer">
+
+		<div class="top-footer">
+
+			<div>
+
+				<p class="nameplate medium-offset-1">CupO'Java Trivia Maze - Powered by Zurb Foundations</p>
+
+			</div>
+
+			<div class="bottom-footer round-top-corners">
+
+				<div class="row">
+
+					<div id='adminfooter' class="large-6 medium-6 columns">
+
+					</div>
+
+					<div class="large-6 medium-6 columns">
+
+						<p class="footer-link center">Instructor? Click <a id='utesttoggle' href='#UnitTest'>here</a> for unit tests.</p>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</footer>
+
+    <script src="js/vendor/jquery.js"></script>
+
+    <script src="js/foundation.min.js"></script>
+
+    <script>
+
+      $(document).foundation();
+
+    </script>
+
+	
+
+  </body>
+
+</html>
+
