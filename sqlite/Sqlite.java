@@ -153,6 +153,9 @@ public class Sqlite {
 		this.exclusions = exclusions;
 	}
 	
+	public void clearExclusions(){
+		this.exclusions = new int[]{};
+	}
 	
 	public boolean add(int tag, String[] args){
 		

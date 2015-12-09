@@ -35,7 +35,6 @@ public class SqliteJUnit {
 	public void test() {
 		int i = 1;
 		int[] exclusion = {1,2,3,4,5,6,7,8,9,10};
-		int[] blank = {};
 		
 		assertEquals("Not clearing db correctly : ", true, slite.clearDatabase());
 		assertEquals("Doesn't handle empty clears correctly : ", false, slite.clearDatabase());
@@ -72,7 +71,7 @@ public class SqliteJUnit {
 	
 		slite.add(Sqlite.MULTIPLE_CHOICE, this.multArgs);
 		slite.add(Sqlite.SHORT_ANSWER, this.shortArgs);
-		slite.setExclusions(blank);
+		slite.clearExclusions();
 		
 		list = slite.queryAll(0);
 		question = list.get(6);
