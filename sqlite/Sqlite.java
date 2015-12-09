@@ -1,5 +1,11 @@
 /*
  * Aaron Young
+ * 
+ * A connection class to a local Sqlite database that can be created
+ * 	if none exists or connect to an existing database. Allows for adding,
+ * 	querying and clearing. Removing from the local database is not supported
+ * 	as well as querying anything not specifically outlined in this class.
+ * 
  */
 package sqlite;
 

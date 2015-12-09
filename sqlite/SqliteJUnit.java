@@ -19,6 +19,10 @@ public class SqliteJUnit {
 	String[] shortArgs = {"Its a short answer?", "Yes it is"};
 	String[] multArgs = {"This is a multiple choice question?", "Yes", "No", "Maybe", "", ""};
 	Sqlite slite;
+	Question question, test;
+	ArrayList<Question> list;
+	int i = 1;
+	int[] exclusion = {1,2,3,4,5,6,7,8,9,10};
 	
 	@Before
 	public void setUp() throws Exception {
@@ -32,15 +36,12 @@ public class SqliteJUnit {
 	}
 
 	@Test
-	public void test() {
-		int i = 1;
-		int[] exclusion = {1,2,3,4,5,6,7,8,9,10};
-		
+	public void setUpDatabase(){
 		assertEquals("Not clearing db correctly : ", true, slite.clearDatabase());
 		assertEquals("Doesn't handle empty clears correctly : ", false, slite.clearDatabase());
 		
 		assertEquals("Connects incorrectly : ", true, slite.connect(dbname));
-		
+
 		assertEquals("Add to database : ", true, slite.add(Sqlite.TRUE_FALSE, args));
 		assertEquals("Archive count : ", 1, slite.countArchive());
 		
@@ -49,8 +50,8 @@ public class SqliteJUnit {
 		
 		assertEquals("Archive count after multiple inserts : ", count, slite.countArchive());
 		assertEquals("Not returning Null on unreachable : ", null, slite.queryAll(count + 1));
-		
-		ArrayList<Question> list = slite.queryAll(0);
+	
+		list = slite.queryAll(0);
 		
 		assertEquals("Not pulling all : ", count, list.size());
 		
@@ -63,8 +64,8 @@ public class SqliteJUnit {
 		
 		assertEquals("Not limiting selection : ", pull, list.size());
 		
-		Question question = list.get(0);
-		Question test = new TrueFalse(0, args[0], args[1]);
+		question = list.get(0);
+		test = new TrueFalse(0, args[0], args[1]);
 		
 		assertEquals("Question not creating args correctly : ", test.getArgs(), question.getArgs());
 		assertEquals("Question not comparing answers correctly : ", true, question.isAnswerCorrect(question.getAnswer()));
