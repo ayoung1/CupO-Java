@@ -199,19 +199,19 @@ public class Maze implements Serializable
    {
 	   if (direction == 0)
 	   {
-		   this.charGrid[row-1][col] = WINPATH;
+		   this.charGrid[row+1][col] = WINPATH;
 	   }
 	   else if (direction == 1)
 	   {
-		   this.charGrid[row][col+1] = WINPATH;
+		   this.charGrid[row][col-1] = WINPATH;
 	   }
 	   else if (direction == 2)
 	   {
-		   this.charGrid[row+1][col] = WINPATH;
+		   this.charGrid[row-1][col] = WINPATH;
 	   }
 	   else if (direction == 3)
 	   {
-		   this.charGrid[row][col-1] = WINPATH;
+		   this.charGrid[row][col+1] = WINPATH;
 	   }
    }
    

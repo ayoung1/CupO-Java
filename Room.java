@@ -1,6 +1,8 @@
 package trivia;
 
-public class Room
+import java.io.*;
+
+public class Room implements Serializable
 {
    public static final int NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3;
    private final int UNLOCKED = 0, LOCKED = 1, TRUELOCK = 2;
@@ -118,5 +120,40 @@ public class Room
       {
          this.westDoor = key;
       }      
+   }
+   private void writeObject(ObjectOutputStream out) throws IOException
+   {
+	   try
+	   {
+		   Room outObject = new Room(this.northDoor,this.eastDoor,this.southDoor,this.westDoor);
+		   out.writeObject(outObject);  
+	   }
+	   catch (IOException e)
+	   {
+		   e.printStackTrace();
+	   }
+   }
+   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
+   {
+	   try
+	   {
+		   Room inObject = (Room)in.readObject();
+		   this.northDoor = inObject.getNorthDoor();
+		   this.eastDoor = inObject.getEastDoor();
+		   this.southDoor = inObject.getSouthDoor();
+		   this.westDoor = inObject.getWestDoor();
+	   }
+	   catch (IOException e)
+	   {
+		   e.printStackTrace();
+	   }
+	   catch (ClassNotFoundException e)
+	   {
+		   e.printStackTrace();
+	   }
+   }
+   private void readObjectNoData() throws ObjectStreamException
+   {
+	   
    }
 }
